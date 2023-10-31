@@ -43,7 +43,6 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     flexWrap: 'wrap',
-    // borderWidth:1
   },
   imageStyle: {
     width: '100%',
