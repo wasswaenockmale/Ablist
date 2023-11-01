@@ -22,7 +22,10 @@ export const COLOR = {
   B_300: "#1f2937",
   B_400: "#161d27",
   B_500: "#131922",
-  WHITE: "#ffffff"
+  WHITE: "#ffffff",
+  NEUTRAL_1: "#0000001A",
+  NEUTRAL_2: "rgba(0,0,0,0.2)",
+  NEUTRAL_3: "rgba(0,0,0,0.6)",
 };
 
 export const FONTSIZE = {
