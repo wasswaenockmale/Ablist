@@ -13,6 +13,7 @@ const Paginator = (
   }
     : PaginatorProps) => {
   const { width } = useWindowDimensions();
+  console.log(data)
   return (
     <View
       style={styles.container}
@@ -23,7 +24,7 @@ const Paginator = (
 
           const dotWidth = scrollX.interpolate({
             inputRange,
-            outputRange: [5, 20, 5],
+            outputRange: [5, 10, 5],
             extrapolate: 'clamp',
           })
           const opacity = scrollX.interpolate({
