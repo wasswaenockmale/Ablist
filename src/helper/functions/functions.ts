@@ -16,8 +16,11 @@ export function ArticleLifeSpan(date: string) {
   // Convert to days
   const days = Math.floor(hours / 24);
 
-  if (days != 0 && days != 1) {
-    return `${days} days`
+  if (days != 0) {
+    if (days == 1) {
+      return `yesterday`
+    }
+    return `${days} days ago`
   } else if( hours != 0){
     return `${hours} hours`
   } else if (minutes != 0) {
