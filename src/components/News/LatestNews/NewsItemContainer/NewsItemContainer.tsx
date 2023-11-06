@@ -1,24 +1,37 @@
 import React from 'react'
-import { StyleSheet, Image, View, Text, TouchableOpacity, useWindowDimensions } from 'react-native'
-import { COLOR, DIMEN, FONTSIZE } from '../../../constants/contants'
-import { loadFonts } from '../../../assets/fonts/fonts'
-import { useNavigation } from '@react-navigation/native'
+import { StyleSheet, Image, View, Text, TouchableOpacity } from 'react-native'
+import { COLOR, DIMEN, FONTSIZE } from '../../../../constants/contants';
+import { loadFonts } from '../../../../assets/fonts/fonts';
+import { ArticleLifeSpan } from '../../../../helper/functions/functions';
 
-const CONTAINER_WIDTH = DIMEN.SCREENWIDTH * 0.99
-const NewsItemContainer = () => {
+const CONTAINER_WIDTH = DIMEN.SCREENWIDTH * 0.99;
+
+interface NewsItemContainerProps {
+  image: any,
+  title: string,
+  author: string,
+  publishedAt: string,
+  handleNavigation: () => void
+}
+const NewsItemContainer = (
+  {
+    image,
+    title,
+    author,
+    publishedAt,
+    handleNavigation
+  }: NewsItemContainerProps
+) => {
 
   const [fontsLoaded] = loadFonts();
-  const navigation = useNavigation();
 
   return (
     <TouchableOpacity
       style={[styles.container]}
-      onPress={() => {
-        navigation.navigate('Details');
-      }}
+      onPress={handleNavigation}
     >
       <Image
-        source={require("../../../assets/images/news-image.jpg")}
+        source={image}
         style={styles.imageStyle}
         width={100}
         resizeMethod='auto'
@@ -28,24 +41,30 @@ const NewsItemContainer = () => {
         style={styles.headingContainer}
       >
         <Text
-          style={{ ...styles.headingText, fontFamily: "RalewaySemiBold" }}
+          style={{
+            ...styles.headingText,
+            fontFamily: "RalewaySemiBold"
+          }}
+          numberOfLines={2}
         >
-          Kenyan Startup Enables WhatsApp Commerce in Africa
+          {title}
         </Text>
         <Text
           style={styles.text}
         >
-          By Sylvia Duruson
+          By {author}
         </Text>
         <View
           style={styles.footerContainer}
         >
           <Text
             style={styles.text}
-          >Oct 30, 2023 </Text>
+          >
+            {new Date(publishedAt).toDateString()}
+          </Text>
           <Text
             style={styles.text}
-          >5 hours ago </Text>
+          >{ArticleLifeSpan(publishedAt)} </Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -67,22 +86,22 @@ const styles = StyleSheet.create({
   imageStyle: {
     height: 250,
     borderRadius: 10,
-    width:'100%'
+    width: '100%'
   },
 
   headingText: {
     fontSize: FONTSIZE.HEADING_5,
-    color:COLOR.WHITE
+    color: COLOR.WHITE
   },
 
   headingContainer: {
-    width:'100%',
+    width: '100%',
     position: 'absolute',
     bottom: 0,
     // left:20,
     backgroundColor: COLOR.NEUTRAL_2,
     paddingHorizontal: 10,
-    paddingVertical:5
+    paddingVertical: 5
   },
 
   footerContainer: {
@@ -92,6 +111,6 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    color:COLOR.WHITE
+    color: COLOR.WHITE
   }
 })
