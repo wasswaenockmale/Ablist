@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native'
+import { Feather } from '@expo/vector-icons';
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { COLOR, FONTSIZE } from '../../../constants/contants';
-import ListItem from '../ListItem/ListItem';
 
 interface ExpandableListItemProps{
   title: string,
@@ -26,13 +26,24 @@ const ExpandableListItem = (
     <View
       style={styles.itemContainer}
     >
+      {/* Pressable section  */}
+      <Pressable
+        style={styles.itemPressable}
+        onPress={toggleExpand}
+      >
+        <Text
+          style={{
+            ...styles.itemTitle,
+            fontFamily:""
+          }}
+        >
+          {title}
+        </Text>
+        {!expand && <Feather name="chevron-down" size={24} color="black" />}
+        {expand && <Feather name="chevron-up" size={24} color="black" />}
+      </Pressable>
 
-      <ListItem
-        title={title}
-        expand={expand}
-        toggleExpand={toggleExpand}
-      />
-
+      {/* Expanded section  */}
       {expand &&
         <Text
           style={{
@@ -63,6 +74,14 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR.GREY_50,
     borderRadius: 10,
     elevation:3
+  },
+  itemPressable: {
+    borderRadius: 10, 
+    overflow: 'hidden',
+    backgroundColor:COLOR.WHITE
+  },
+  itemTitle: {
+    fontSize:FONTSIZE.TITLE_1
   },
   itemContent: {
     fontSize: FONTSIZE.BODY,
