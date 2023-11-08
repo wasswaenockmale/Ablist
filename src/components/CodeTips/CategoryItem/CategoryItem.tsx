@@ -1,33 +1,38 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, Pressable } from 'react-native'
 import { COLOR, FONTSIZE } from '../../../constants/contants'
 
 interface CategoryItemProps{
-  isActive: boolean,
   name: string
+  isActive: boolean
+  setActive: () => void
 }
+
 const CategoryItem = (
   {
+    name,
     isActive,
-    name
+    setActive
   }:CategoryItemProps
 ) => {
   return (
-    <View
+    <Pressable
       style={{
         ...styles.categoryItemContainer,
         backgroundColor:isActive ? COLOR.B_300 : COLOR.WHITE
       }}
+      onPress={setActive}
     >
       <Text
         style={{
           ...styles.text,
-          fontFamily:""
+          fontFamily: "",
+          color:isActive ? COLOR.WHITE : COLOR.B_300
         }}
       >
         {name}
       </Text>
-    </View>
+    </Pressable>
   )
 }
 
@@ -37,9 +42,10 @@ const styles = StyleSheet.create({
   categoryItemContainer: {
     borderRadius: 20,
     padding: 5,
-    alignSelf: 'flex-start',
+    // alignSelf: 'flex-start',
     borderWidth: 1,
-    borderColor:COLOR.B_300
+    borderColor: COLOR.B_300,
+    marginHorizontal:5
   },
   text: {
     fontSize:FONTSIZE.SMALL
