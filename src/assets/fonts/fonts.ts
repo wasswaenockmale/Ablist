@@ -38,6 +38,13 @@ const fontNames = {
   RalewayBlack: Raleway_900Black
 };
 
-export function loadFonts() {
-  return useFonts(fontNames);
+async function* promiseGenerator<T>(promise: Promise<T>): AsyncGenerator<T>{
+  yield await promise;
+}
+
+export async function loadFonts() {
+  // const [fontsLoaded] =
+    return useFonts(fontNames);
+  // console.log(fontsLoaded)
+  // return promiseGenerator(Promise.resolve([fontsLoaded, null]))
 }
