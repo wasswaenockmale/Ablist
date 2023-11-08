@@ -23,7 +23,13 @@ const NewsItemContainer = (
   }: NewsItemContainerProps
 ) => {
 
-  const [fontsLoaded] = loadFonts();
+  // const [fontsLoaded] = loadFonts()
+  // console.log(loadFonts())
+  // React.useEffect(() => { 
+    loadFonts()
+      .then(response => response)
+      .catch(error => console.error("Error while loading fonts", error));
+  // }, []);
 
   return (
     <TouchableOpacity
