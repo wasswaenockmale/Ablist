@@ -39,8 +39,21 @@ const ExpandableListItem = (
         >
           {title}
         </Text>
-        {!expand && <Feather name="chevron-down" size={24} color="black" />}
-        {expand && <Feather name="chevron-up" size={24} color="black" />}
+
+        {!expand &&
+          <Feather
+            name="chevron-down"
+            size={20}
+            color={COLOR.B_300}
+          />
+        }
+        {expand &&
+          <Feather
+            name="chevron-up"
+            size={20}
+            color={COLOR.B_300}
+          />
+        }
       </Pressable>
 
       {/* Expanded section  */}
