@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useContext, useEffect, useState } from 'react';
 import { environments } from '../../constants/environments';
-import AppwriteService from '../../appwrite/appwrite';
 import DatabaseService from '../../appwrite/appwrite';
+import { AppContext } from '../context/AppContext';
 
 const useArticles = () => {
   const [articles, setArticles] = useState<any[]>([]);
   const [topStories, setTopStories] = useState<any[]>([]);
+
+  // Access the loading state
+  const { setIsLoading } = useContext(AppContext);
 
   const {
     APPWRITE_DATABASE_ID,
@@ -17,6 +19,7 @@ const useArticles = () => {
 
     const fetchData = async () => {
       try {
+        setIsLoading(true)
         const techInAfricaResponse =
           await DatabaseService.getArticles(
             APPWRITE_DATABASE_ID,
@@ -43,6 +46,7 @@ const useArticles = () => {
       } catch (error) {
         
       } finally {
+        setIsLoading(false);
       }
     }
 

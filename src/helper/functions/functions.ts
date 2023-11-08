@@ -18,7 +18,16 @@ export function ArticleLifeSpan(date: string) {
 
   if (days != 0) {
     if (days == 1) {
-      return `yesterday`
+      return `${days} day, ${hours - 24} hours`;
+    } else if (days >= 7) {
+      // Convert to weeks 
+      const weeks = Math.floor(days / 7);
+      
+      if (weeks == 1) {
+        return `${weeks} week`
+      } else {
+        return `${weeks} weeks`
+      }
     }
     return `${days} days ago`
   } else if( hours != 0){
