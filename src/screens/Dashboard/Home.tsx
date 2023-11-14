@@ -1,6 +1,5 @@
-import React, { Fragment, useContext } from 'react'
+import React, { Fragment, useCallback, useContext } from 'react'
 import {
-  StatusBar,
   StyleSheet,
   Animated,
   View,
@@ -8,80 +7,105 @@ import {
 } from 'react-native'
 
 // constants
-import { COLOR } from '../../constants/contants'
-// components 
-import LatestNewsContainer from '../../components/News/LatestNews/LatestNewsContainer/LatestNewsContainer'
-import NewsListContainer from '../../components/News/NewsListContainer/NewsListContainer'
-import HomeHeading from '../../components/HomeScreenText/HomeHeading'
-import Header from '../../components/Header/Header'
-import SearchBar from '../../components/SearchBar/SearchBar'
-import { AppContext } from '../../helper/context/AppContext'
+import { COLOR, FONTSIZE } from '../../constants/contants'
+
 import Loading from '../../components/Loading/Loading'
-import { loadFonts } from '../../assets/fonts/fonts'
+import { AppContext } from '../../helper/context/AppContext'
+
+import { Entypo } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import TabBar from '../../routes/TabBar'
+import BookmarkModal from '../../components/BookmarkModal/BookmarkModal'
+import { useFonts } from 'expo-font'
 
 const Home = () => {
 
-  const [searchWord, setSearchWord] = React.useState<string>('');
   const { isLoading } = useContext(AppContext);
 
-  const handleCancelClick = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const [bookmarkModalVisible, setBookmarkModalVisible] = React.useState<boolean>(false);
 
+  // handle bookmark modal 
+  const toggleModal = () => {
+    setBookmarkModalVisible(!bookmarkModalVisible)
   }
-
-  const handleSearchInput = (text: string) => {
-    setSearchWord(text)
-  }
-
-  const searchResults = () => {
-
-  }
-
   // The app is still fetching data, from the database.
-  if (isLoading) {
-    <Loading />
+  let [fontsLoaded, fontError] = useFonts({
+    "ComfortaaLight": require('../../assets/fonts/Comfortaa/static/Comfortaa-Light.ttf'),
+    "Comfortaa_Regular": require('../../assets/fonts/Comfortaa/static/Comfortaa-Regular.ttf'),
+    "ComfortaaMedium": require('../../assets/fonts/Comfortaa/static/Comfortaa-Medium.ttf'),
+    "ComfortaaSemiBold": require('../../assets/fonts/Comfortaa/static/Comfortaa-SemiBold.ttf'),
+    "ComfortaaBold": require('../../assets/fonts/Comfortaa/static/Comfortaa-Bold.ttf'),
+    "RalewayThin": require('../../assets/fonts/Raleway/static/Raleway-Thin.ttf'),
+    "RalewayExtraLight": require('../../assets/fonts/Raleway/static/Raleway-ExtraLight.ttf'),
+    "RalewayLight": require('../../assets/fonts/Raleway/static/Raleway-Light.ttf'),
+    "RalewayRegular": require('../../assets/fonts/Raleway/static/Raleway-Regular.ttf'),
+    "RalewayMedium": require('../../assets/fonts/Raleway/static/Raleway-Medium.ttf'),
+    "RalewaySemiBold": require('../../assets/fonts/Raleway/static/Raleway-SemiBold.ttf'),
+    "RalewayBold": require('../../assets/fonts/Raleway/static/Raleway-Bold.ttf'),
+    "RalewayExtraBold": require('../../assets/fonts/Raleway/static/Raleway-ExtraBold.ttf'),
+    "RalewayBlack": require('../../assets/fonts/Raleway/static/Raleway-Black.ttf')
   }
-
+  );
+  
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
+  
   return (
     <Animated.View
       style={styles.container}
     >
-      <Header
-        title='Ablist'
-        iconName={'settings-outline'}
-      />
+      <View
+        style={styles.headerContainer}
+      >
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingHorizontal: 10,
+            marginBottom: 5
+          }}
+        >
+          <Text
+            style={
+              [
+                styles.text,
+                {
+                  fontSize: FONTSIZE.TITLE_1,
+                  fontFamily:'ComfortaaBold'
+                }]
+            }
+          >
+          {`Ablist`}
+        </Text>
 
-      <SearchBar
-        searchWord=''
-        handleCancelClick={handleCancelClick}
-        handleSearchInput={handleSearchInput}
-      />
-      {
-        searchWord?.length > 0 ?
-          (
-            <View style={styles.searchContainer}>
-              <Text>Not available</Text>
-            </View>
-          ) :
-          (
-            <Fragment>
-              <HomeHeading title='Latest News' />
-              {/* container for latest news  */}
-              <LatestNewsContainer />
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
+        >
+          <Entypo
+            name="dots-three-vertical"
+            size={20}
+            color="black"
+            onPress={() => { }}
+          />
 
-              <HomeHeading title='Trending News' />
-              <Animated.ScrollView
-                showsVerticalScrollIndicator={false}
-              >
-                {/* Container for the list of the rest of the news  */}
-                <NewsListContainer />
-
-                <StatusBar />
-              </Animated.ScrollView>
-            </Fragment>
-          )
-      }
-    </Animated.View>
-  )
+          {/* Check bookmarks.  */}
+          <BookmarkModal
+            isModalVisible={bookmarkModalVisible}
+            toggleModal={toggleModal}
+          />
+        </View>
+      </View>
+      <TabBar />
+      </View>
+      <Loading isLoading={isLoading && fontsLoaded} />
+    </Animated.View >
+  );
 }
 
 export default Home
@@ -89,12 +113,20 @@ export default Home
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
     backgroundColor: COLOR.WHITE,
   },
+
   searchContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  text: {
+
+  },
+  headerContainer: {
+    // paddingHorizontal: 10,
+    flex: 1,
+    paddingVertical: 10,
   }
 })
