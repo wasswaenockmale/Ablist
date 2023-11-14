@@ -1,141 +1,216 @@
 import {
-  StyleSheet,
   Text,
   View,
-  Animated,
   Image,
-  StatusBar
+  Animated,
+  StatusBar,
+  Pressable,
+  StyleSheet,
 } from 'react-native'
 import React from 'react'
+
 import Header from './helperComponents/Header'
-import CommentFooter from './helperComponents/CommentFooter'
 import { COLOR, FONTSIZE } from '../../constants/contants'
-import Reporter from '../../components/Reporter/Reporter'
-import { useRoute } from '@react-navigation/native'
+import * as SecureStore from 'expo-secure-store';
+
+import {
+  useRoute,
+  useNavigation,
+} from '@react-navigation/native'
+
+import {
+  Entypo,
+  Ionicons,
+  MaterialCommunityIcons
+} from '@expo/vector-icons'
+
+import onShare from '../../utils/onShare'
+
+import {
+  NativeStackNavigationProp
+} from '@react-navigation/native-stack';
+import { DetailsScreenProps } from '../../../types';
 
 const NewsDetails = () => {
 
-  const router = useRoute();
+  const router = useRoute<DetailsScreenProps>();
   const { params } = router;
+
+  const [open, setOpen] = React.useState<boolean>(false);
+  const [showMoreButton, setShowMoreButton] = React.useState<boolean>(false);
+
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
+  // share article
+  const message = `https://www.techinafrica.com/${params?.title}`;
+
+  // function to bookmark.
+  const bookmark = async () => {
+    const articleArr = await SecureStore.getItemAsync('bookmarks');
+    if (articleArr) {
+      const res = JSON.parse(articleArr);
+      await SecureStore.setItemAsync('bookmarks', JSON.stringify([...res, { ...params }]))
+    } else {
+      await SecureStore.setItemAsync('bookmarks', JSON.stringify([{ ...params }]));
+    }
+  };
 
   return (
     <Animated.View
       style={styles.container}
     >
-      <Header
-        title='Details'
-      />
       <View
-        style={styles.techNewView}
+        style={{
+          flexDirection: 'row',
+          justifyContent: "space-between",
+          paddingHorizontal: 10,
+          borderBottomWidth: 1,
+          borderBottomColor: COLOR.B_50
+        }}
       >
-        <Text
-          style={[
-            styles.techText,
-            {
-              fontFamily: "ComfortaaBold",
-            }
-          ]}
-        >Tech News Africa</Text>
+        <Header
+          title='Tech News'
+        />
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 10
+          }}
+        >
+          <MaterialCommunityIcons
+            name="share-outline"
+            size={30}
+            color={COLOR.GREY_500}
+            onPress={() => onShare(message)}
+          />
+          <Ionicons
+            name="bookmark-outline"
+            size={20}
+            color={COLOR.GREY_500}
+            onPress={bookmark}
+          />
+        </View>
       </View>
       <Animated.ScrollView
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          padding: 20,
+          paddingBottom: 50
+        }}
       >
-        
+
         <Text
           style={{
-            fontFamily: "ComfortaaBold",
-            fontSize:FONTSIZE.TITLE_1
+            fontSize: FONTSIZE.TITLE_1,
+            lineHeight: 25
           }}
+          numberOfLines={4}
         >
-          {/* Kenyan conversational commerce startup Sukhiba Connect
-          aims to power seamless buying and selling through WhatsApp
-          as social commerce booms across Africa. */}
           {params?.title}
         </Text>
         <Text
           style={{
             color: COLOR.B_200,
-            fontFamily: "RalewayRegular",
             marginVertical: 10,
+            lineHeight: 20
           }}
         >
-          {/* The continent’s social commerce market is rapidly
-          expanding as businesses leverage platforms like WhatsApp.
-          However, limitations exist around digital payments and delivery, which is where Sukhiba comes in. */}
-          {params?.excerpt}
+          {params?.excerpt.split(".").slice(0, 1).join("\n")}
         </Text>
 
         <Image
-          source={{uri: params?.featured_image}}
+          source={{ uri: params?.featured_image }}
           style={styles.image}
           resizeMethod='auto'
           resizeMode='cover'
         />
-
+        {/* Author and time  */}
+        <View>
+        </View>
         <Text
           style={{
-            fontFamily: "RalewaySemiBold",
             color: COLOR.GREY_400,
             marginVertical: 10,
-            
+            lineHeight: 20,
+            letterSpacing: 0.9,
+            marginBottom: 10
+          }}
+          numberOfLines={!open ? 15 : undefined}
+          onTextLayout={event => {
+            if (event.nativeEvent.lines.length > 5) {
+              setShowMoreButton(true)
+            }
           }}
         >
-          {/* The company has developed a B2B tool enabling companies to
-          reach and transact with customers directly within WhatsApp.
-          Sellers can manage orders, accept mobile payments,
-          send notifications and group buyers without leaving the app.
-          “We brought the ability to do the full transaction from
-          conversation to purchase, payments and delivery on WhatsApp,”
-          said Sukhiba co-founder and CEO Ananth Gudipati.
-          So far, Sukhiba has enabled WhatsApp commerce for over 30
-          companies, largely manufacturers and distributors serving
-          some 15,000 small and medium enterprises. These sellers use
-          Sukhiba to help sales teams expand their reach and gain new
-          retailers as customers.
-          Features like customer routing assign reps to provide tailored
-          support within WhatsApp based on location. Gudipati says this
-          maintains vital personal relationships between buyers and
-          sellers. */}
-          {params?.articleContent}
-        </Text>
+          {params?.articleContent.replace(params?.excerpt.split(".").slice(0, 1).join("\n"), "")}
+        </Text >
 
-        <Reporter
-          name='Reported by Sylvia Duruson'
-          articleLongitivity='4 min'
-          imageUrl={params?.featured_image}
-        />
-      </Animated.ScrollView>
-      <CommentFooter />
-      <StatusBar backgroundColor={COLOR.WHITE} translucent={false} barStyle='dark-content' />
-    </Animated.View>
-  )
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between'
+          }}
+        >
+          <View />
+          <Pressable
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+            onPress={() => {
+              setOpen(!open)
+            }}>
+            <Text
+              style={{
+                color: COLOR.ORANGE_300
+              }}
+            >
+              {!open && showMoreButton ? "show more" : "show less"}
+            </Text>
+            {
+              !open && showMoreButton ?
+                <Entypo name="chevron-small-down" size={20} color={COLOR.B_300} /> :
+                <Entypo name="chevron-small-up" size={20} color={COLOR.B_300} />
+            }
+          </Pressable>
+        </View>
+
+      </Animated.ScrollView >
+      < StatusBar
+        backgroundColor={COLOR.WHITE}
+        translucent={false}
+        barStyle='dark-content'
+      />
+    </Animated.View >
+  );
 }
 
 export default NewsDetails
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     position: 'relative',
-    padding: 20,
-    backgroundColor:COLOR.WHITE
+    backgroundColor: COLOR.WHITE
   },
   techNewView: {
-    alignSelf:"flex-start",
+    alignSelf: "flex-start",
     backgroundColor: COLOR.B_300,
     borderRadius: 5,
     alignItems: 'center',
     paddingVertical: 2,
-    paddingHorizontal:5,
+    paddingHorizontal: 5,
     marginVertical: 5,
+    padding: 20
   },
   techText: {
     fontSize: FONTSIZE.TITLE_2,
-    color:COLOR.WHITE
+    color: COLOR.WHITE
   },
   image: {
-    width:"100%",
-    height: 150,
-    borderRadius:10
+    width: "100%",
+    height: 200,
+    borderRadius: 10
   }
 })
