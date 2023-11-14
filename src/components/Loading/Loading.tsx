@@ -1,32 +1,42 @@
-import React from 'react'
-import {
-  ActivityIndicator,
-  StyleSheet,
-  View
-} from 'react-native'
+import { ActivityIndicator, Modal, StyleSheet, View } from "react-native";
+import { COLOR } from "../../constants/contants";
 
-import { COLOR } from '../../constants/contants'
-
-const Loading = () => {
+const Loading = ({ isLoading }) => {
   return (
-    <View
-      style={styles.container}
+    <Modal
+      transparent={true}
+      visible={isLoading}
+      animationType='none'
     >
-      <ActivityIndicator
-        size='large'
-        color={COLOR.ORANGE_300}
-      />
-    </View>
-  )
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: COLOR.NEUTRAL_2
+        }}
+      >
+        <ActivityIndicator
+          size='large'
+          style={{
+            flex: 1,
+            backgroundColor: 'transparent',
+          }}
+          color={COLOR.ORANGE_300}
+        />
+      </View>
+    </Modal>
+  );
 }
 
-export default Loading
-
 const styles = StyleSheet.create({
-  container: {
+  loader: {
     flex: 1,
+    backgroundColor: COLOR.WHITE,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor:COLOR.NEUTRAL_3
   }
-})
+
+});
+
+export default Loading;
