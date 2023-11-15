@@ -2,17 +2,47 @@ import {
   StyleSheet,
   Text, View,
   Pressable,
-  TextInput
+  TextInput,
+  ToastAndroid,
+  PressableProps
 } from 'react-native'
 import React from 'react'
-import { Formik } from 'formik';
+import { Formik, useFormikContext } from 'formik';
 import { COLOR, FONTSIZE } from '../../constants/contants'
-import {Picker} from "@react-native-picker/picker"
+import { environments } from '../../constants/environments';
+import { Picker } from "@react-native-picker/picker";
+import DatabaseService from '../../appwrite/appwrite';
+import { TalentSubmissionForm } from '../../../types';
+
+// Access the environmental variables needed in this file.
+const {
+  APPWRITE_DATABASE_ID,
+  APPWRITE_SERVICEREQUESTS_COLLECTION_ID
+} = environments;
 
 const FindTalent = () => {
-  const submitTalentRequestForm = (values: any) => {
-    console.log(values)
+
+  const { handleSubmit } = useFormikContext();
+
+  const submitTalentRequestForm = async (values: TalentSubmissionForm) => {
+
+    const submissionResponse = await DatabaseService.storeDBdata(
+      APPWRITE_DATABASE_ID,
+      APPWRITE_SERVICEREQUESTS_COLLECTION_ID,
+      values
+    );
+
+    if (submissionResponse) {
+      // Toast a message to show the user that the request form has been successfully submitted.
+      ToastAndroid.show('Request successfully sent', 5000);
+    }
   }
+
+  // handle press.
+  const handlePress = () => {
+    handleSubmit();
+  }
+
   return (
     <View style={styles.container}>
       <View
@@ -32,15 +62,14 @@ const FindTalent = () => {
           email: '',
           phone: '',
           company: '',
-          lookingFor: '',
           message: '',
+          lookingFor: '',
         }}
         onSubmit={submitTalentRequestForm}
       >
         {(
           {
             handleChange,
-            handleSubmit,
             handleBlur,
             values,
             errors,
@@ -123,15 +152,14 @@ const FindTalent = () => {
             />
 
             <Pressable
-              // accessibilityRole='button'
-              onPress={handleSubmit}
+              onPress={handlePress}
               style={styles.button}
-              // disabled={isSubmitting}
             >
               <Text
                 style={{
                   color: COLOR.WHITE,
-                  textAlign:'center'
+                  textAlign: 'center',
+                  fontFamily:"ComfortaaBold"
                 }}
               >
                 SEND
@@ -153,13 +181,14 @@ const styles = StyleSheet.create({
     flex:1
   },
   text: {
-
+    fontFamily:'RalewayRegular'
   },
   title: {
-    fontSize:FONTSIZE.TITLE_1
+    fontSize: FONTSIZE.TITLE_1,
+    fontFamily:"RalewaySemiBold"
   },
   description: {
-    
+    fontFamily:'RalewayMedium'
   },
   button: {
     alignSelf: 'center',
@@ -176,6 +205,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     margin: 10,
-    borderColor:COLOR.B_300
+    borderColor: COLOR.B_300,
+    fontFamily:'ComfortaaMedium'
   }
 })
