@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
-import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View } from 'react-native'
+import { useNavigation } from '@react-navigation/native';
 import useArticles from '../../../helper/hooks/useArticles';
 import TrendingNewsItem from '../TrendingNewsItem/TrendingNewsItem';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -19,7 +19,7 @@ const NewsListContainer = () => {
           <Fragment key={index}>
             <TrendingNewsItem
               title={item.title}
-              reporter={`Sylvia Duruson`}
+              reporter={`Tech News Africa`}
               datePublished={item.publishedAt}
               featuredImage={{ uri: item.featured_image }}
               handleTendingArticleClick={() => {

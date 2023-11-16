@@ -40,6 +40,7 @@ const TrendingNewsItem = (
       >
         <Text
           numberOfLines={2}
+          style={styles.text}
         >
           {title}
         </Text>
@@ -55,17 +56,21 @@ const TrendingNewsItem = (
           >
             {/* News reporter  */}
             <Text
+              style={styles.text}
             >
-              {reporter}
+              By: {reporter}
             </Text>
             {/* separator  */}
-            <Text
+            {/* <Text
               style={styles.textFooter}
-            > | </Text>
+            > | </Text> */}
             {/* Date the news was published */}
           </View>
-          <Text
-          >{new Date(datePublished).toDateString().split(" ").slice(1).join(" ")}</Text>
+          {/* <Text
+            style={styles.text}
+          >
+            {new Date(datePublished).toDateString().split(" ").slice(1).join(" ")}
+          </Text> */}
           {/* time from publish date  */}
           <Text
             style={styles.textFooter}
@@ -106,6 +111,10 @@ const styles = StyleSheet.create({
   },
   textFooter: {
     fontSize: FONTSIZE.SMALL,
-    color: COLOR.GREY_100
+    color: COLOR.GREY_100,
+    fontFamily:'RalewayLight'
+  },
+  text: {
+    fontFamily:"RalewayRegular"
   }
 })

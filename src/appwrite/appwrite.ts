@@ -1,10 +1,10 @@
-import { Client, Databases } from "appwrite";
+import { Client, Databases, ID, Query } from "appwrite";
 import { environments } from "../constants/environments";
+import { TalentSubmissionForm, userModal } from "../utils/types";
 
-const appwriteClient = new Client();
+export const appwriteClient = new Client();
 
 const { 
-  APPWRITE_API_KEY,
   APPWRITE_PROJECT_ID,
   APPWRITE_PROJECT_ENDPOINT,
 } = environments;
@@ -14,20 +14,28 @@ const {
 
   constructor(){
     appwriteClient
-      .setEndpoint(environments.APPWRITE_PROJECT_ENDPOINT)
-      .setProject(environments.APPWRITE_PROJECT_ID)
+      .setEndpoint(APPWRITE_PROJECT_ENDPOINT)
+      .setProject(APPWRITE_PROJECT_ID)
       
     this.databases = new Databases(appwriteClient);
   }
 
-  async getArticles(databaseID:string, collectionID:string) {
+  async getDBData(databaseID:string, collectionID:string) {
     try {
-      return (await this.databases.listDocuments(databaseID, collectionID)).documents
-    } catch (error) {
-      console.log('getArticles -- ', error);
+      return (await this.databases.listDocuments(databaseID, collectionID,[Query.limit(100), Query.offset(0)])).documents
+    } catch (error:any) {
+      console.log('getDBData -- ', error.message);
+    }
+  }
+   
+  async storeDBdata(databaseID: string, collectionID: string, data:userModal | TalentSubmissionForm) {
+    try {
+      return this.databases.createDocument(databaseID, collectionID, ID.unique(),data)
+    } catch (error:any) {
+      console.log('storeDBdata -- appwrite class -- ', error.message)
     }
   }
 }
 
 const DatabaseService = new AppwriteService();
-export default DatabaseService;
+export default DatabaseService

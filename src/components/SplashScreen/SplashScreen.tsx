@@ -20,12 +20,12 @@ const SplashScreen = () => {
       <Animated.Text
         style={[styles.text, {
           transform: [{ scale: textScale }],
-          fontFamily:"ComfortaaBold",
+           :"ComfortaaBold",
         }]}
       >
-        Ablist
-      </Animated.Text>
-    </View>
+      Ablist
+    </Animated.Text>
+    </View >
   )
 }
 
@@ -36,10 +36,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor:COLOR.ORANGE_300
+    backgroundColor: COLOR.ORANGE_300
   },
   text: {
     fontSize: FONTSIZE.HEADING_1,
-    color:COLOR.WHITE
+    color: COLOR.WHITE
   }
 })

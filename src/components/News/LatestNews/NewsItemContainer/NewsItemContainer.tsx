@@ -1,7 +1,6 @@
-import React from 'react'
-import { StyleSheet, Image, View, Text, TouchableOpacity } from 'react-native'
+import React from 'react';
+import { StyleSheet, Image, View, Text, Pressable } from 'react-native'
 import { COLOR, DIMEN, FONTSIZE } from '../../../../constants/contants';
-import { loadFonts } from '../../../../assets/fonts/fonts';
 import { ArticleLifeSpan } from '../../../../helper/functions/functions';
 
 const CONTAINER_WIDTH = DIMEN.SCREENWIDTH * 0.99;
@@ -13,6 +12,7 @@ interface NewsItemContainerProps {
   publishedAt: string,
   handleNavigation: () => void
 }
+
 const NewsItemContainer = (
   {
     image,
@@ -23,40 +23,40 @@ const NewsItemContainer = (
   }: NewsItemContainerProps
 ) => {
 
-  // const [fontsLoaded] = loadFonts()
-  // console.log(loadFonts())
-  // React.useEffect(() => { 
-    loadFonts()
-      .then(response => response)
-      .catch(error => console.error("Error while loading fonts", error));
-  // }, []);
-
   return (
-    <TouchableOpacity
-      style={[styles.container]}
-      onPress={handleNavigation}
+    <View
+      style={styles.container}
     >
-      <Image
-        source={image}
-        style={styles.imageStyle}
-        width={100}
-        resizeMethod='auto'
-        resizeMode='contain'
-      />
-      <View
-        style={styles.headingContainer}
+      <Pressable
+        onPress={handleNavigation}
       >
-        <Text
-          style={{
-            ...styles.headingText,
-            fontFamily: "RalewaySemiBold"
-          }}
-          numberOfLines={2}
+        <View
+          style={styles.imageView}
         >
+          <Image
+            source={image}
+            style={styles.imageStyle}
+            // width={100}
+            resizeMethod='resize'
+            resizeMode='cover'
+          />
+        </View>
+        <View
+          style={styles.headingContainer}
+        >
+          <Text
+            style={{
+              ...styles.headingText,
+            }}
+          numberOfLines={2}
+          >
           {title}
         </Text>
         <Text
-          style={styles.text}
+            style={{
+              ...styles.text,
+              fontFamily:"RalewayRegular"
+            }}
         >
           By {author}
         </Text>
@@ -69,11 +69,15 @@ const NewsItemContainer = (
             {new Date(publishedAt).toDateString()}
           </Text>
           <Text
-            style={styles.text}
+              style={{
+                ...styles.text,
+                fontFamily:"RalewayRegular"
+            }}
           >{ArticleLifeSpan(publishedAt)} </Text>
         </View>
-      </View>
-    </TouchableOpacity>
+    </View>
+      </Pressable >
+    </View >
   );
 }
 
@@ -81,33 +85,31 @@ export default NewsItemContainer
 
 const styles = StyleSheet.create({
   container: {
-    width: CONTAINER_WIDTH,
+
   },
 
   imageView: {
     borderRadius: 10,
-    borderColor: COLOR.ORANGE_400,
   },
 
   imageStyle: {
     height: 250,
     borderRadius: 10,
-    width: '100%'
   },
 
   headingText: {
     fontSize: FONTSIZE.HEADING_5,
-    color: COLOR.WHITE
+    color: COLOR.WHITE,
+    fontFamily:"ComfortaaBold"
   },
 
   headingContainer: {
     width: '100%',
     position: 'absolute',
     bottom: 0,
-    // left:20,
     backgroundColor: COLOR.NEUTRAL_2,
     paddingHorizontal: 10,
-    paddingVertical: 5
+    paddingVertical: 5,
   },
 
   footerContainer: {
@@ -117,6 +119,7 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    color: COLOR.WHITE
+    color: COLOR.WHITE,
+    fontFamily:"RalewayRegular"
   }
 })

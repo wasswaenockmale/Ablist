@@ -1,10 +1,12 @@
 import React from 'react';
 
+import { Alert } from 'react-native';
+import * as Updates from 'expo-updates';
 import { NavigationContainer } from '@react-navigation/native';
+
 import Routes from './src/routes/routes';
 import AppContextProvider from './src/helper/context/AppContext';
-import * as Updates from 'expo-updates';
-import { Alert } from 'react-native';
+import TabBar from './src/routes/TabBar';
 
 export default function App() {
   // function to listen to updates.
@@ -18,7 +20,7 @@ export default function App() {
         // Since updates are available, notify the user about the updates available
         Alert.alert(
           "Update available",
-          "Don't miss out on the latest Ablist features. Tap 'update' to update your app now.",
+          "Don't miss out on the latest Ablist features. Tap 'UPDATE' to update your app now.",
           [
             {
               text: "UPDATE",
@@ -46,9 +48,11 @@ export default function App() {
   Updates.useUpdateEvents(eventListener);
   // the return function.
   return (
+    // <StackItems />
     <NavigationContainer>
       <AppContextProvider>
         <Routes />
+        {/* <TabBar /> */}
       </AppContextProvider>
     </NavigationContainer>
   );

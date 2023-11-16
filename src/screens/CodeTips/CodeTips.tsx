@@ -2,42 +2,34 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  Text
 } from 'react-native'
-import React from 'react';
+import React, { useContext } from 'react';
 // constants 
 import { COLOR } from '../../constants/contants';
+
 // components 
-import Header from '../../components/Header/Header';
 import CategorySection from '../../components/CodeTips/CategorySection/CategorySection';
 import ExpandableListItem from '../../components/CodeTips/ExpandableListItem/ExpandableListItem';
 
+import useArticles from '../../helper/hooks/useArticles';
 import { AppContext } from '../../helper/context/AppContext';
-import TipOfTheDay from '../../components/CodeTips/TOTD/TipOfTheDay';
-import StackCodeTips from '../../components/CodeTips/StackCodeTips/StackCodeTips';
+import Header from '../NewsDetails/helperComponents/Header';
 
 const CodeTips = () => {
 
-  const { codeTips } = React.useContext(AppContext);
+  // const { codeTips } = useArticles();
+  const { codeTips } = useContext(AppContext);
+  const [expandedIndex, setExpandedIndex] = React.useState<number | null>(0)
+
+
+  const handleToggleExpand = (index: number) => {
+    setExpandedIndex((prevIndex) => (prevIndex === index ? null : index))
+  }
 
   return (
     <View
       style={styles.codeTipsContainer}
     >
-      <Header
-        title='Coding Tips'
-        iconName={'code'}
-      />
-
-      {/* Section for the user to select a category  */}
-      <CategorySection />
-
-      {/* Tip of the day  */}
-      <TipOfTheDay
-        title={codeTips[0].title}
-        content={codeTips[0].description}
-        snippet={codeTips[0].snippet}
-      />
 
       <View
         style={styles.contentContainer}
@@ -48,20 +40,26 @@ const CodeTips = () => {
           contentContainerStyle={styles.scrollableCodeTips}
         >
           {
-            codeTips.slice(1).map((codeTip: any, index: number) => (
-              <ExpandableListItem
-                key={index}
-                title={codeTip.title}
-                name={codeTip.source.name}
-                content={codeTip.description}
-                snippet={codeTip.snippet}
-                link={codeTip.source.link}
-              />
-            ))
+            codeTips?.map((codeTip: any, index: number) => {
+              // if (index !== 0) {
+                return (
+                  <ExpandableListItem
+                    key={index}
+                    title={codeTip.title}
+                    index={index}
+                    sourceName={`Berkeley Boot Camps	`}
+                    content={codeTip.description}
+                    snippet={codeTip.snippet}
+                    sourceLink={codeTip.source.link}
+                    expandedIndex={expandedIndex}
+                    onToggleExpand={handleToggleExpand}
+                  />
+                )
+              // }
+            })
           }
         </ScrollView>
       </View>
-      {/* <StackCodeTips /> */}
     </View>
   );
 }
@@ -71,16 +69,18 @@ export default CodeTips
 const styles = StyleSheet.create({
   codeTipsContainer: {
     flex:1,
+    padding:10,
+    paddingTop: 10,
     backgroundColor: COLOR.WHITE,
-    padding: 10,
   },
   contentContainer: {
-    flex:1,
+    flex: 1,
+    marginTop:10
   },
   showCodeTip: {
     flex: 1,
-    
   },
   scrollableCodeTips: {
+
   }
 });

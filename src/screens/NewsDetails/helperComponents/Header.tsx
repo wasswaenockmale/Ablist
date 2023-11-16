@@ -31,6 +31,7 @@ const Header = (
         style={[
           styles.text,
           {
+            fontFamily:'ComfortaaBold'
           }
         ]}
       >

@@ -4,15 +4,16 @@ import {
   Pressable,
   TextInput,
   ToastAndroid,
-  PressableProps
+  ActivityIndicator,
 } from 'react-native'
 import React from 'react'
-import { Formik, useFormikContext } from 'formik';
+import { Picker } from "@react-native-picker/picker";
+import { Formik } from 'formik';
+import DatabaseService from '../../appwrite/appwrite';
 import { COLOR, FONTSIZE } from '../../constants/contants'
 import { environments } from '../../constants/environments';
-import { Picker } from "@react-native-picker/picker";
-import DatabaseService from '../../appwrite/appwrite';
-import { TalentSubmissionForm } from '../../../types';
+import { TalentSubmissionForm } from '../../utils/types';
+import { TalentFormValidationSchema } from '../../utils/validations';
 
 // Access the environmental variables needed in this file.
 const {
@@ -20,35 +21,29 @@ const {
   APPWRITE_SERVICEREQUESTS_COLLECTION_ID
 } = environments;
 
+// submit request form.
+const submitTalentRequestForm = async (values: TalentSubmissionForm) => {
+
+  const submissionResponse = await DatabaseService.storeDBdata(
+    APPWRITE_DATABASE_ID,
+    APPWRITE_SERVICEREQUESTS_COLLECTION_ID,
+    values
+  );
+
+  if (submissionResponse) {
+    // Toast a message to show the user that the request form has been successfully submitted.
+    ToastAndroid.show('Request successfully sent', 5000);
+  }
+}
+
 const FindTalent = () => {
-
-  const { handleSubmit } = useFormikContext();
-
-  const submitTalentRequestForm = async (values: TalentSubmissionForm) => {
-
-    const submissionResponse = await DatabaseService.storeDBdata(
-      APPWRITE_DATABASE_ID,
-      APPWRITE_SERVICEREQUESTS_COLLECTION_ID,
-      values
-    );
-
-    if (submissionResponse) {
-      // Toast a message to show the user that the request form has been successfully submitted.
-      ToastAndroid.show('Request successfully sent', 5000);
-    }
-  }
-
-  // handle press.
-  const handlePress = () => {
-    handleSubmit();
-  }
 
   return (
     <View style={styles.container}>
       <View
         style={{
           paddingHorizontal: 20,
-          padding:5
+          padding: 5
         }}
       >
         <Text style={styles.title}>Tell us about your need.</Text>
@@ -66,15 +61,18 @@ const FindTalent = () => {
           lookingFor: '',
         }}
         onSubmit={submitTalentRequestForm}
+        validationSchema={TalentFormValidationSchema}
       >
         {(
           {
-            handleChange,
-            handleBlur,
             values,
             errors,
+            touched,
             isValid,
             isSubmitting,
+            handleBlur,
+            handleSubmit,
+            handleChange,
           }
         ) => (
           <View
@@ -87,6 +85,8 @@ const FindTalent = () => {
               placeholder='Name'
               style={styles.inputContainer}
             />
+            {errors.name && touched.name && <Text style={styles.errorText}>{errors.name}</Text>}
+
             <TextInput
               onChangeText={handleChange('email')}
               onBlur={handleBlur('email')}
@@ -94,6 +94,8 @@ const FindTalent = () => {
               placeholder='Email'
               style={styles.inputContainer}
             />
+            {errors.email && touched.email && <Text style={styles.errorText}>{errors.email}</Text>}
+
             <TextInput
               onChangeText={handleChange('phone')}
               onBlur={handleBlur('phone')}
@@ -101,6 +103,8 @@ const FindTalent = () => {
               placeholder='Phone'
               style={styles.inputContainer}
             />
+            {errors.phone && touched.phone && <Text style={styles.errorText}>{errors.phone}</Text>}
+
             <TextInput
               onChangeText={handleChange('company')}
               onBlur={handleBlur('company')}
@@ -108,12 +112,13 @@ const FindTalent = () => {
               placeholder='Company/Organization'
               style={styles.inputContainer}
             />
+            {errors.company && touched.company && <Text style={styles.errorText}>{errors.company}</Text>}
             <View
               style={{
                 borderWidth: 1,
                 margin: 10,
                 borderRadius: 10,
-                borderColor:COLOR.B_300
+                borderColor: COLOR.B_300
               }}
             >
               <Picker
@@ -141,6 +146,7 @@ const FindTalent = () => {
                   value="toolManager"
                 />
               </Picker>
+              {errors.lookingFor && touched.lookingFor && <Text style={styles.errorText}>{errors.lookingFor}</Text>}
             </View>
             <TextInput
               onChangeText={handleChange('message')}
@@ -150,20 +156,34 @@ const FindTalent = () => {
               style={styles.inputContainer}
               multiline
             />
+            {errors.message && touched.message && <Text style={styles.errorText}>{touched.message}</Text>}
 
             <Pressable
-              onPress={handlePress}
-              style={styles.button}
+              onPress={() => handleSubmit()}
+              style={{
+                ...styles.button,
+                padding: isSubmitting ? 10 : 5,
+                opacity: isValid ? 0.7 : 1
+              }}
+              disabled={isSubmitting || isValid}
             >
-              <Text
-                style={{
-                  color: COLOR.WHITE,
-                  textAlign: 'center',
-                  fontFamily:"ComfortaaBold"
-                }}
-              >
-                SEND
-              </Text>
+              {isSubmitting &&
+                <ActivityIndicator
+                size='small'
+                color={COLOR.WHITE}
+                />
+              }
+              {!isSubmitting &&
+                <Text
+                  style={{
+                    color: COLOR.WHITE,
+                    textAlign: 'center',
+                    fontFamily: "ComfortaaBold"
+                  }}
+                >
+                  SEND
+                </Text>
+              }
             </Pressable>
           </View>
         )}
@@ -178,27 +198,27 @@ const styles = StyleSheet.create({
   container: {
     padding: 10,
     backgroundColor: COLOR.WHITE,
-    flex:1
+    flex: 1
   },
   text: {
-    fontFamily:'RalewayRegular'
+    fontFamily: 'RalewayRegular'
   },
   title: {
     fontSize: FONTSIZE.TITLE_1,
-    fontFamily:"RalewaySemiBold"
+    fontFamily: "RalewaySemiBold"
   },
   description: {
-    fontFamily:'RalewayMedium'
+    fontFamily: 'RalewayMedium'
   },
   button: {
     alignSelf: 'center',
     backgroundColor: COLOR.B_300,
     padding: 5,
     borderRadius: 5,
-    width:'95%'
+    width: '95%'
   },
   formContainer: {
-    padding:10
+    padding: 10
   },
   inputContainer: {
     padding: 10,
@@ -206,6 +226,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     margin: 10,
     borderColor: COLOR.B_300,
-    fontFamily:'ComfortaaMedium'
+    fontFamily: 'ComfortaaMedium'
+  },
+  errorText: {
+    color: COLOR.DANGER,
+    paddingHorizontal:10
   }
 })

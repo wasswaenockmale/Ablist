@@ -5,6 +5,7 @@ import {
   StyleSheet,
   View,
   ViewToken,
+  useWindowDimensions,
 } from 'react-native';
 
 import { DIMEN } from '../../../../constants/contants';
@@ -19,24 +20,52 @@ import NewsItemContainer from '../NewsItemContainer/NewsItemContainer';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 const LatestNewsContainer = () => {
-  const arr = [1, 2, 3, 5];
+
+  // Navigation hook
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   
-  const scrollX = React.useRef(new Animated.Value(1)).current;
-
+  // state hooks 
   const [currentIndex, setCurrentIndex] = React.useState<number>(0);
-
+  
+  // useWindowDimens()
+  const { width } = useWindowDimensions();
+  
+  // useRef hooks
+  const scrollX = React.useRef(new Animated.Value(1)).current;
   const slidesRef = React.useRef(null);
-
   const viewableItemsChanged = React.useRef(({ viewableItems }: { viewableItems: ViewToken[] }) => {
     if (viewableItems[0].index !== null) {
       setCurrentIndex(viewableItems[0].index)
     }
   }).current;
 
-  const viewConfig = React.useRef({ viewAreaCoveragePercentThreshold: 50 }).current
+  const viewConfig = React.useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
+
+  // custom hook for fetching articles.
   const { topStories } = useArticles();
+
+  const renderLatestStory = ({ item, index }: { item: any, index: number }) => (
+    <View
+      style={{
+        width: width * 0.90,
+        // borderWidth:10
+        marginRight: index === topStories.length - 1 || index === 0 ? 10 : 5,
+        marginLeft: index === 0 ? 5 : 0
+      }}
+    >
+      <NewsItemContainer
+        key={index}
+        image={{ uri: item.featured_image }}
+        title={item.title}
+        author={"Tech News Africa"}
+        publishedAt={item.publishedAt}
+        handleNavigation={() => {
+          navigation.navigate("Details", item);
+        }}
+      />
+    </View>
+  );
 
   return (
     <View
@@ -44,21 +73,11 @@ const LatestNewsContainer = () => {
     >
       <FlatList
         data={topStories}
-        renderItem={({ item, index }) => (
-          <NewsItemContainer
-            key={index}
-            image={{ uri: item.featured_image }}
-            title={item.title}
-            author={"Sylvia Duruson"}
-            publishedAt={item.publishedAt}
-            handleNavigation={() => {
-              navigation.navigate("Details", item);
-            }}
-          />
-        )}
+        style={{ width: '100%', flexWrap: 'wrap' }}
+        numColumns={1}
+        renderItem={renderLatestStory}
         horizontal
         showsHorizontalScrollIndicator={false}
-        pagingEnabled
         bounces={false}
         keyExtractor={(item) => item?.articleID.toString()}
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], { useNativeDriver: false })}
@@ -79,7 +98,8 @@ export default LatestNewsContainer;
 
 const styles = StyleSheet.create({
   container: {
-    width: DIMEN.SCREENWIDTH,
-    marginRight: 10
+    padding: 5,
   },
+  flatListStyle: {
+  }
 })
