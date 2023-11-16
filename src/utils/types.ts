@@ -20,7 +20,12 @@ type RootStackParamList = {
   };
   CodeTips: undefined;
 }
-
+type userModal = {
+  email: string
+  phone: string
+  lastName: string
+  firstName: string
+}
 type DetailsScreenProps = RouteProp<RootStackParamList, 'Details'>
 
 // interface for TalentSubmissionForm
@@ -36,5 +41,6 @@ export {
   NewsRouteParams,
   RootStackParamList,
   DetailsScreenProps,
-  TalentSubmissionForm
+  TalentSubmissionForm,
+  userModal
 }

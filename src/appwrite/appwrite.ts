@@ -1,6 +1,6 @@
 import { Client, Databases, ID, Query } from "appwrite";
 import { environments } from "../constants/environments";
-import { TalentSubmissionForm } from "../utils/types";
+import { TalentSubmissionForm, userModal } from "../utils/types";
 
 export const appwriteClient = new Client();
 
@@ -9,12 +9,6 @@ const {
   APPWRITE_PROJECT_ENDPOINT,
 } = environments;
  
-interface userModal{
-  email: string
-  phone: string
-  lastName: string
-  firstName: string
-}
  class AppwriteService {
   databases: Databases;
 
