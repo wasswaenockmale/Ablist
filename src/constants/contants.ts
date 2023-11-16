@@ -26,6 +26,7 @@ export const COLOR = {
   NEUTRAL_1: "#0000001A",
   NEUTRAL_2: "rgba(0,0,0,0.2)",
   NEUTRAL_3: "rgba(0,0,0,0.6)",
+  DANGER: 'red'
 };
 
 export const FONTSIZE = {
