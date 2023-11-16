@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home from "../screens/Dashboard/Home";
-import NewsDetails from "../screens/NewsDetails/NewsDetails";
+import NewsDetails from '../screens/NewsDetails/NewsDetails'
+import BottomNavigation from './BottomNavigation';
+import { loadFonts } from '../assets/fonts/fonts';
 
 
 const Stack = createNativeStackNavigator();
@@ -10,7 +11,7 @@ const Routes = () => {
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
     >
-      <Stack.Screen name='Home' component={Home} />
+      <Stack.Screen name='Home' component={BottomNavigation} />
       <Stack.Screen name='Details' component={NewsDetails} />
     </Stack.Navigator>
   );

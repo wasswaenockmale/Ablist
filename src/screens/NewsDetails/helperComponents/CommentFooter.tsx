@@ -45,7 +45,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // borderWidth: 1,
     paddingHorizontal: 10,
-    backgroundColor:COLOR.WHITE
+    backgroundColor: COLOR.WHITE,
+    marginTop:10
   },
   commentInputView: {
     flex:1

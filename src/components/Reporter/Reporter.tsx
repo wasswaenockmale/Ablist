@@ -1,7 +1,19 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const Reporter = () => {
+interface ReporterComponentProps{
+  name: string,
+  articleLongitivity: any,
+  imageUrl: any
+}
+
+const Reporter = (
+  {
+    name,
+    articleLongitivity,
+    imageUrl
+  }:ReporterComponentProps
+) => {
   return (
     <View
       style={styles.container}
@@ -17,15 +29,16 @@ const Reporter = () => {
           style={styles.imageView}
         >
           <Image
-            source={require("../../assets/images/AbleStateLogo.jpeg")}
+            source={{uri:imageUrl}}
             resizeMethod='resize'
             resizeMode='contain'
             style={styles.imageStyle}
           />
         </View>
-        <Text>By Sylvia Duruson</Text>
+        <Text>{name}</Text>
       </View>
-      <Text>4 min</Text>
+      <Text>{articleLongitivity}</Text>
+      
     </View>
   )
 }
@@ -37,15 +50,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginVertical:5
+    marginVertical: 5,
   },
   imageView: {
     width: 50,
     height: 50,
     flexWrap: 'wrap',
+    borderRadius:25
   },
   imageStyle: {
     width: '100%',
-    height:"100%"
+    height: "100%",
+    borderRadius:50
     }
 })

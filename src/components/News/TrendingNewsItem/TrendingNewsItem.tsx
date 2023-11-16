@@ -1,13 +1,18 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
-import { COLOR, FONTSIZE } from '../../constants/contants'
+import {
+  StyleSheet, Text,
+  View, Image, TouchableOpacity
+} from 'react-native';
 
-interface TrendingNewsItem{
+import { ArticleLifeSpan } from '../../../helper/functions/functions'
+import { FONTSIZE, COLOR } from '../../../constants/contants'
+
+interface TrendingNewsItem {
   title: string,
   reporter: string,
   datePublished: string,
-  timePublished: string,
-  featuredImage: any
+  featuredImage: any,
+  handleTendingArticleClick: () => void
 }
 
 const TrendingNewsItem = (
@@ -15,13 +20,14 @@ const TrendingNewsItem = (
     title,
     reporter,
     datePublished,
-    timePublished,
-    featuredImage
+    featuredImage,
+    handleTendingArticleClick
   }
     : TrendingNewsItem) => {
   return (
     <TouchableOpacity
       style={styles.container}
+      onPress={handleTendingArticleClick}
     >
       <Image
         source={featuredImage}
@@ -32,7 +38,9 @@ const TrendingNewsItem = (
       <View
         style={styles.newsHeadingContainer}
       >
-        <Text>
+        <Text
+          numberOfLines={2}
+        >
           {title}
         </Text>
         <View
@@ -42,7 +50,7 @@ const TrendingNewsItem = (
           <View
             style={{
               flexDirection: 'row',
-              alignItems:'center'
+              alignItems: 'center'
             }}
           >
             {/* News reporter  */}
@@ -55,13 +63,13 @@ const TrendingNewsItem = (
               style={styles.textFooter}
             > | </Text>
             {/* Date the news was published */}
-            <Text
-            >{ datePublished }</Text>
           </View>
+          <Text
+          >{new Date(datePublished).toDateString().split(" ").slice(1).join(" ")}</Text>
           {/* time from publish date  */}
           <Text
             style={styles.textFooter}
-          >5 hours ago</Text>
+          >{ArticleLifeSpan(datePublished)}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -85,19 +93,19 @@ const styles = StyleSheet.create({
   },
   newsHeadingContainer: {
     flex: 1,
-    padding:5
+    padding: 5
   },
   newHeadingContainerFooter: {
-    width:"100%",
+    width: "100%",
     flexDirection: 'row',
     position: 'absolute',
     bottom: 0,
-    left:5,
-    alignItems: 'center', 
-    justifyContent:'space-between'
+    left: 5,
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
   textFooter: {
     fontSize: FONTSIZE.SMALL,
-    color:COLOR.GREY_100
+    color: COLOR.GREY_100
   }
 })

@@ -4,7 +4,14 @@ import { AntDesign } from '@expo/vector-icons'
 import { COLOR, FONTSIZE } from '../../../constants/contants'
 import { useNavigation } from '@react-navigation/native'
 
-const Header = () => {
+interface HeaderProps{
+  title: string
+}
+const Header = (
+  {
+    title=""
+  }:HeaderProps
+) => {
   
   const navigation = useNavigation();
 
@@ -28,7 +35,7 @@ const Header = () => {
           }
         ]}
       >
-        Details
+        {title}
       </Text>
       <View />
     </View>

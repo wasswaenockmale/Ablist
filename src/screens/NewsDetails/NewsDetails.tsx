@@ -1,38 +1,56 @@
-import { StyleSheet, Text, View, Animated, Image, StatusBar } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View,
+  Animated,
+  Image,
+  StatusBar
+} from 'react-native'
 import React from 'react'
 import Header from './helperComponents/Header'
 import CommentFooter from './helperComponents/CommentFooter'
 import { COLOR, FONTSIZE } from '../../constants/contants'
 import Reporter from '../../components/Reporter/Reporter'
+import { useRoute } from '@react-navigation/native'
 
 const NewsDetails = () => {
+
+  const router = useRoute();
+  const { params } = router;
+
   return (
     <Animated.View
       style={styles.container}
     >
-      <Header />
-      <Animated.ScrollView>
-        <View
-          style={styles.techNewView}
-        >
-          <Text
-            style={[
-              styles.techText,
-              {
-                fontFamily: "ComfortaaBold",
-              }
-            ]}
-          >Tech News Africa</Text>
-        </View>
+      <Header
+        title='Details'
+      />
+      <View
+        style={styles.techNewView}
+      >
+        <Text
+          style={[
+            styles.techText,
+            {
+              fontFamily: "ComfortaaBold",
+            }
+          ]}
+        >Tech News Africa</Text>
+      </View>
+      <Animated.ScrollView
+        showsVerticalScrollIndicator={false}
+      >
+        
         <Text
           style={{
             fontFamily: "ComfortaaBold",
             fontSize:FONTSIZE.TITLE_1
           }}
         >
-          Kenyan conversational commerce startup Sukhiba Connect
+          {/* Kenyan conversational commerce startup Sukhiba Connect
           aims to power seamless buying and selling through WhatsApp
-          as social commerce booms across Africa.
+          as social commerce booms across Africa. */}
+          {params?.title}
         </Text>
         <Text
           style={{
@@ -41,18 +59,19 @@ const NewsDetails = () => {
             marginVertical: 10,
           }}
         >
-          The continent’s social commerce market is rapidly
+          {/* The continent’s social commerce market is rapidly
           expanding as businesses leverage platforms like WhatsApp.
-          However, limitations exist around digital payments and delivery, which is where Sukhiba comes in.
+          However, limitations exist around digital payments and delivery, which is where Sukhiba comes in. */}
+          {params?.excerpt}
         </Text>
 
         <Image
-          source={require('../../assets/images/news-image.jpg')}
+          source={{uri: params?.featured_image}}
           style={styles.image}
           resizeMethod='auto'
           resizeMode='cover'
         />
-        <Reporter />
+
         <Text
           style={{
             fontFamily: "RalewaySemiBold",
@@ -61,7 +80,7 @@ const NewsDetails = () => {
             
           }}
         >
-          The company has developed a B2B tool enabling companies to
+          {/* The company has developed a B2B tool enabling companies to
           reach and transact with customers directly within WhatsApp.
           Sellers can manage orders, accept mobile payments,
           send notifications and group buyers without leaving the app.
@@ -76,8 +95,15 @@ const NewsDetails = () => {
           Features like customer routing assign reps to provide tailored
           support within WhatsApp based on location. Gudipati says this
           maintains vital personal relationships between buyers and
-          sellers.
+          sellers. */}
+          {params?.articleContent}
         </Text>
+
+        <Reporter
+          name='Reported by Sylvia Duruson'
+          articleLongitivity='4 min'
+          imageUrl={params?.featured_image}
+        />
       </Animated.ScrollView>
       <CommentFooter />
       <StatusBar backgroundColor={COLOR.WHITE} translucent={false} barStyle='dark-content' />
@@ -91,16 +117,16 @@ const styles = StyleSheet.create({
   container: {
     flex:1,
     position: 'relative',
-    padding: 10,
+    padding: 20,
     backgroundColor:COLOR.WHITE
   },
   techNewView: {
-    width:'40%',
+    alignSelf:"flex-start",
     backgroundColor: COLOR.B_300,
     borderRadius: 5,
-    flex: 1,
     alignItems: 'center',
-    paddingVertical: 5,
+    paddingVertical: 2,
+    paddingHorizontal:5,
     marginVertical: 5,
   },
   techText: {
