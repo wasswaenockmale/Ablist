@@ -5,41 +5,53 @@ import {
   StyleSheet,
   Text, View
 } from 'react-native';
-import { Feather } from '@expo/vector-icons';
-import { COLOR, FONTSIZE } from '../../../constants/contants';
-import CodeHighlighter from "react-native-code-highlighter";
-import { atomOneDarkReasonable } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
-interface ExpandableListItemProps{
+import { Feather, FontAwesome } from '@expo/vector-icons';
+import { COLOR, FONTSIZE } from '../../../constants/contants';
+import { atomOneDarkReasonable } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import CodeHighlighter from "react-native-code-highlighter";
+import onShare from '../../../utils/onShare';
+
+interface ExpandableListItemProps {
   title: string,
   content: string,
   snippet: any,
-  name: string,
-  link: string
+  sourceName: string,
+  sourceLink: string
+  expandedIndex: number | null
+  index: number
+  onToggleExpand: (index: number) => void
 }
-
 
 const ExpandableListItem = (
   {
     title,
+    index,
     content,
-    snippet = "no",
-    name,
-    link
+    snippet = "",
+    sourceName,
+    sourceLink,
+    expandedIndex,
+    onToggleExpand
   }: ExpandableListItemProps
 ) => {
-  const [expand, setExpand] = React.useState<boolean>(false);
+  const [expand, setExpand] = React.useState<boolean>(true);
 
   const toggleExpand = () => {
     setExpand(!expand);
+    onToggleExpand(index);
   }
 
   const handleLinkPress = async () => {
     try {
-      const canOpen = await Linking.canOpenURL(link).then(response => response)
+      const canOpen = await Linking.canOpenURL(sourceLink)
+        .then(response => response)
+        .catch((error: any) => {
+          console.log("Link error", error.message);
+        });
       if (canOpen) {
-        console.log("The link should open")
-        await Linking.openURL(link)
+        console.log("The link should open");
+        await Linking.openURL(sourceLink)
           .then(response => {
             console.log("Opened the link", response);
           })
@@ -48,9 +60,11 @@ const ExpandableListItem = (
           })
       }
     } catch (error) {
-      console.log("Caught the error", error)
+      console.log("Caught the error", error);
     }
   }
+
+  const message = content + " " + title;
 
   return (
     <View style={styles.itemContainer}>
@@ -60,64 +74,128 @@ const ExpandableListItem = (
           ...styles.itemPressable,
           borderBottomLeftRadius: !expand ? 10 : 0,
           borderBottomRightRadius: !expand ? 10 : 0,
+          borderWidth: !expand ? 0.5 : 0
         }}
         onPress={toggleExpand}
       >
         <View
           style={styles.titleViewStyle}
         >
-          <Text style={{ ...styles.itemTitle, fontFamily: "" }} numberOfLines={3}>
+          <Text
+            numberOfLines={3}
+            style={{
+              ...styles.itemTitle,
+              fontFamily: "RalewayBold"
+            }}
+          >
             {title}
           </Text>
+          {/* Open the neccessary app so that a link is opened  */}
           <Pressable
             style={styles.linkStyle}
             onPress={handleLinkPress}
           >
             <Text
               style={{
-                ...styles.itemName,
-                fontFamily: "",
+                ...styles.itemsourceName,
+                fontFamily: "RalewayExtraBold"
               }}
               numberOfLines={1}
             >
-              {name}
+              Source: {sourceName}
             </Text>
           </Pressable>
         </View>
 
-        {!expand && (
-          <Feather name="chevron-down" size={20} color={COLOR.B_300} />
-        )}
-        {expand && (
-          <Feather name="chevron-up" size={20} color={COLOR.B_300} />
-        )}
-      </Pressable>
+        {
+          !expand && (
+            <Feather
+              name="chevron-down"
+              size={20}
+              color={COLOR.B_300}
+            />
+          )
+        }
+        {
+          expand && (
+            <Feather
+              name="chevron-up"
+              size={20}
+              color={COLOR.B_300}
+            />
+          )
+        }
+      </Pressable >
 
       {/* Expanded section */}
-      {expand && (
-        <View style={styles.codeDescriptionStyle}>
-          <Text style={{ ...styles.itemContent, fontFamily: "" }}>{content}</Text>
-        </View>
-      )}
+      {
+        expand && (
+          <View
+            style={
+              styles.codeDescriptionStyle
+            }
+          >
+            <Text
+              style={{
+                ...styles.itemContent,
+              }}
+            >
+              {content}
+            </Text>
+          </View >
+        )
+      }
 
       {/* If the code snippet is available, show it in the details of the tip otherwise don't */}
-      {expand && snippet !== "" && (
-        <View style={styles.codeDescriptionStyle}>
-          <CodeHighlighter
-            hljsStyle={atomOneDarkReasonable}
-            containerStyle={styles.codeSnippet}
-            textStyle={styles.text}
-            language="javascript"
+      {
+        expand && snippet !== "" && (
+          <View style={styles.codeDescriptionStyle}>
+            <CodeHighlighter
+              hljsStyle={atomOneDarkReasonable}
+              containerStyle={styles.codeSnippet}
+              textStyle={styles.text}
+              language="javascript"
+            >
+              {snippet}
+            </CodeHighlighter>
+          </View>
+        )
+      }
+      {/* Share tip  */}
+      {
+        expand &&
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: "space-between",
+            paddingHorizontal: 10,
+            paddingVertical: 10
+          }}
+        >
+          <View />
+          <Pressable
+            style={{
+              flexDirection: "row",
+              gap: 5,
+              alignItems: 'center',
+              paddingHorizontal: 10
+            }}
+            onPress={() => onShare(message)}
           >
-            {snippet}
-          </CodeHighlighter>
+            <FontAwesome
+              name="share"
+              size={20}
+              color={COLOR.B_300}
+            />
+            <Text style={{ fontSize: FONTSIZE.TITLE_2 }}>Share tip</Text>
+          </Pressable>
         </View>
-      )}
-    </View>
+      }
+    </View >
   );
 }
 
-// Add the new styles for name and link in your styles object
+// Add the new styles for sourceName and link in your styles object
 const styles = StyleSheet.create({
   itemContainer: {
     marginBottom: 10,
@@ -141,7 +219,7 @@ const styles = StyleSheet.create({
   itemTitle: {
     fontSize: FONTSIZE.TITLE_1,
   },
-  itemName: {
+  itemsourceName: {
     fontSize: FONTSIZE.BODY,
     color: COLOR.GREY_100,
   },
@@ -150,7 +228,7 @@ const styles = StyleSheet.create({
     color: COLOR.B_300,
   },
   itemContent: {
-    fontSize: FONTSIZE.BODY,
+    fontSize: FONTSIZE.TITLE_1,
     color: COLOR.GREY_100,
   },
   codeSnippet: {
@@ -165,7 +243,8 @@ const styles = StyleSheet.create({
   },
   text: {},
   titleViewStyle: {
-    height:"100%"
+    flex: 1,
+    height: "100%"
   },
   linkStyle: {
     bottom: 0,

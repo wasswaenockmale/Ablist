@@ -38,15 +38,13 @@ const styles = StyleSheet.create({
   container: {
     position: 'absolute',
     bottom: 5,
-    left: 0,
-    right: 0,
     flexDirection: 'row',
     gap: 5,
     alignItems: 'center',
-    // borderWidth: 1,
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
     backgroundColor: COLOR.WHITE,
-    marginTop:10
+    marginTop: 10,
+    // opacity:0.5 
   },
   commentInputView: {
     flex:1

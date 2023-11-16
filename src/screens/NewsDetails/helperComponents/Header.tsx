@@ -1,44 +1,43 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { AntDesign } from '@expo/vector-icons'
-import { COLOR, FONTSIZE } from '../../../constants/contants'
+import { Ionicons } from '@expo/vector-icons';
+import { FONTSIZE } from '../../../constants/contants'
 import { useNavigation } from '@react-navigation/native'
 
-interface HeaderProps{
+interface HeaderProps {
   title: string
 }
 const Header = (
   {
-    title=""
-  }:HeaderProps
+    title = ""
+  }: HeaderProps
 ) => {
-  
+
   const navigation = useNavigation();
 
   return (
     <View
       style={styles.container}
     >
-      <AntDesign
-        name='arrowleft'
-        color={COLOR.B_300}
-        size={20}
+      <Ionicons
+        name="chevron-back"
+        size={24}
+        color="black"
         onPress={() => {
-          navigation.goBack();
+          navigation.goBack()
         }}
       />
       <Text
         style={[
           styles.text,
           {
-            fontFamily: ""
           }
         ]}
       >
         {title}
       </Text>
       <View />
-    </View>
+    </View >
   )
 }
 
@@ -49,9 +48,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding:5
+    padding: 5,
+    paddingVertical: 10,
+    // borderBottomWidth: 1,
+    // borderBottomColor:COLOR.B_50
   },
   text: {
-    fontSize:FONTSIZE.TITLE_1
+    fontSize: FONTSIZE.TITLE_1
   }
 })
