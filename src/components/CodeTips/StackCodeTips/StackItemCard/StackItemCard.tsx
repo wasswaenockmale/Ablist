@@ -1,7 +1,10 @@
-import { Alert, Linking, Platform, Pressable, Share, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { AntDesign, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
+import {
+  Alert, Linking, Platform,
+  Pressable, Share, StyleSheet, Text, View
+} from 'react-native'
 import CodeHighlighter from 'react-native-code-highlighter'
+import { AntDesign, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
 import { atomOneDarkReasonable } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import { COLOR, FONTSIZE } from '../../../../constants/contants'
 
@@ -77,7 +80,7 @@ const StackItemCard = (
         <Text
           style={{
             ...styles.itemTitle,
-            fontFamily: ""
+             : ""
           }}
           numberOfLines={3}
         >
@@ -91,35 +94,35 @@ const StackItemCard = (
         <Text
           style={{
             ...styles.itemContent,
-            fontFamily: ""
+             : ""
           }}
         >
           {content}
         </Text>
-      </View>
+      </View >
 
-      {/* If the code snippet is available, show it in the details of the tip otherwise don't  */}
-      <View
-        style={styles.codeDescriptionStyle}
+  {/* If the code snippet is available, show it in the details of the tip otherwise don't  */ }
+  < View
+style = { styles.codeDescriptionStyle }
+  >
+  { snippet !== "" && (
+    <View style={styles.codeDescriptionStyle}>
+      <CodeHighlighter
+        hljsStyle={atomOneDarkReasonable}
+        containerStyle={styles.codeSnippet}
+        textStyle={styles.text}
+        language="javascript"
       >
-        {snippet !== "" && (
-          <View style={styles.codeDescriptionStyle}>
-            <CodeHighlighter
-              hljsStyle={atomOneDarkReasonable}
-              containerStyle={styles.codeSnippet}
-              textStyle={styles.text}
-              language="javascript"
-            >
-              {snippet}
-            </CodeHighlighter>
-          </View>
-        )}
-      </View>
+        {snippet}
+      </CodeHighlighter>
+    </View>
+  )}
+      </View >
 
-      {/* share section.  */}
-      <View
-        style={styles.sourceContainer}
-      >
+  {/* share section.  */ }
+  < View
+style = { styles.sourceContainer }
+  >
         <View
           style={styles.favoriteStyle}
         >
@@ -164,8 +167,8 @@ const StackItemCard = (
             onPress={onShare}
           />
         </View>
-      </View>
-    </View>
+      </View >
+    </View >
   );
 }
 

@@ -29,7 +29,7 @@ import onShare from '../../utils/onShare'
 import {
   NativeStackNavigationProp
 } from '@react-navigation/native-stack';
-import { DetailsScreenProps } from '../../../types';
+import { DetailsScreenProps } from '../../utils/types';
 
 const NewsDetails = () => {
 
@@ -103,7 +103,8 @@ const NewsDetails = () => {
         <Text
           style={{
             fontSize: FONTSIZE.TITLE_1,
-            lineHeight: 25
+            lineHeight: 25,
+            fontFamily: 'RalewayRegular'
           }}
           numberOfLines={4}
         >
@@ -113,7 +114,8 @@ const NewsDetails = () => {
           style={{
             color: COLOR.B_200,
             marginVertical: 10,
-            lineHeight: 20
+            lineHeight: 20,
+            fontFamily: "RalewayRegular"
           }}
         >
           {params?.excerpt.split(".").slice(0, 1).join("\n")}
@@ -134,7 +136,8 @@ const NewsDetails = () => {
             marginVertical: 10,
             lineHeight: 20,
             letterSpacing: 0.9,
-            marginBottom: 10
+            marginBottom: 10,
+            fontFamily: "RalewayRegular"
           }}
           numberOfLines={!open ? 15 : undefined}
           onTextLayout={event => {

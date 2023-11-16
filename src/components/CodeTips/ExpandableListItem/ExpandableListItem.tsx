@@ -37,6 +37,7 @@ const ExpandableListItem = (
 ) => {
   const [expand, setExpand] = React.useState<boolean>(true);
 
+  const tipSource = sourceLink ?? `https://bootcamp.berkeley.edu/blog/use-these-7-tips-to-help-you-learn-computer-programming-faster/`
   const toggleExpand = () => {
     setExpand(!expand);
     onToggleExpand(index);
@@ -230,6 +231,7 @@ const styles = StyleSheet.create({
   itemContent: {
     fontSize: FONTSIZE.TITLE_1,
     color: COLOR.GREY_100,
+    fontFamily:"ComfortaaMedium"
   },
   codeSnippet: {
     width: '100%',
@@ -241,7 +243,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
   },
-  text: {},
+  text: {
+    fontFamily:'ComfortaaMedium'
+  },
   titleViewStyle: {
     flex: 1,
     height: "100%"

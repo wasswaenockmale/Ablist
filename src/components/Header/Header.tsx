@@ -1,13 +1,14 @@
 import React from 'react';
+import { useFonts } from 'expo-font';
+import { Entypo } from '@expo/vector-icons';
 import { StyleSheet, Text, View } from 'react-native';
 import { COLOR, FONTSIZE } from '../../constants/contants';
-import { loadFonts } from '../../assets/fonts/fonts';
-import { Ionicons } from '@expo/vector-icons';
 
-interface HeaderProps{
+interface HeaderProps {
   title: string
   iconName: any
 }
+
 
 const Header = (
   {
@@ -16,55 +17,65 @@ const Header = (
   }: HeaderProps
 ) => {
 
-  React.useEffect(() => {
-    loadFonts()
-      .then(response => console.log(response))
-      .catch(error => console.log(error));
-  }, [])
-
   return (
     <View
       style={styles.container}
     >
-      <Text
-        style={
-          [styles.text, { fontFamily: "ComfortaaSemiBold" }]
-        }
-      >
-        {title}
-      </Text>
-      
       <View
         style={{
           flexDirection: 'row',
-          alignItems: 'center',
-          gap:2
+          justifyContent: 'space-between'
         }}
       >
-        <Ionicons
-          name={iconName}
-          size={20}
-          color={COLOR.B_300}
-        />
+        <Text
+          style={
+            [
+              styles.text,
+              {
+                fontFamily:"ComfortaaBold"
+              }
+            ]
+          }
+        >
+          {title}
+        </Text>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 2
+          }}
+        >
+          <Entypo
+            name="dots-three-vertical"
+            size={20}
+            color="black"
+            onPress={() => { }}
+          />
+        </View>
       </View>
-    </View>
-  )
+      <View
+        style={{
+          width: 200
+        }}
+      >
+      </View>
+    </View >
+  );
 }
 
 export default Header
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    justifyContent: 'space-between',
     paddingHorizontal: 5,
-    alignItems: "center",
     borderBottomWidth: 1,
     borderBottomColor: COLOR.GREY_50,
   },
   text: {
     color: COLOR.B_300,
     fontSize: FONTSIZE.HEADING_5,
-    marginRight:10
+    marginRight: 10
   }
 })

@@ -2,7 +2,8 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { FONTSIZE, COLOR } from '../../constants/contants'
 
-interface TextProps{
+
+interface TextProps {
   title: string
 }
 const HomeHeading = (
@@ -10,6 +11,7 @@ const HomeHeading = (
     title
   }:
     TextProps) => {
+
   return (
     <View
       style={styles.container}
@@ -18,13 +20,13 @@ const HomeHeading = (
         style={[
           styles.text,
           {
-            fontFamily: "RalewaySemiBold",
+            fontFamily: "RalewayBold"
           }
         ]}
       >
-        {title}
-      </Text>
-    </View>
+      {title}
+    </Text>
+    </View >
   );
 }
 
@@ -32,7 +34,7 @@ export default HomeHeading
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal:10
+    paddingHorizontal: 10
   },
   text: {
     fontSize: FONTSIZE.TITLE_1,
