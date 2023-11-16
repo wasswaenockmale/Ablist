@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from '../screens/Dashboard/Home';
 import CodeTips from '../screens/CodeTips/CodeTips';
 import NewsDetails from '../screens/NewsDetails/NewsDetails';
-import { RootStackParamList } from '../../types';
+import { RootStackParamList } from '../utils/types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -13,7 +13,7 @@ const Routes = () => {
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
     >
-      <Stack.Screen name='Home' component={Home}/>
+      <Stack.Screen name='Home' component={Home} />
       <Stack.Screen name='Details' component={NewsDetails} />
       <Stack.Screen name='CodeTips' component={CodeTips} />
     </Stack.Navigator>
