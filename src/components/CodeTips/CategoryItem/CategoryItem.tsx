@@ -26,12 +26,12 @@ const CategoryItem = (
       <Text
         style={{
           ...styles.text,
-           : "",
-      color:isActive ? COLOR.WHITE : COLOR.B_300
+          fontFamily: "RalewayMedium",
+          color: isActive ? COLOR.WHITE : COLOR.B_300
         }}
       >
-      {name}
-    </Text>
+        {name}
+      </Text>
     </Pressable >
   )
 }
@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
   categoryItemContainer: {
     borderRadius: 20,
     padding: 5,
-    // alignSelf: 'flex-start',
     borderWidth: 1,
     borderColor: COLOR.B_300,
     marginHorizontal: 5
