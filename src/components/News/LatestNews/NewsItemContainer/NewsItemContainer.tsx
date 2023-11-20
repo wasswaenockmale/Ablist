@@ -3,8 +3,6 @@ import { StyleSheet, Image, View, Text, Pressable } from 'react-native'
 import { COLOR, DIMEN, FONTSIZE } from '../../../../constants/contants';
 import { ArticleLifeSpan } from '../../../../helper/functions/functions';
 
-const CONTAINER_WIDTH = DIMEN.SCREENWIDTH * 0.99;
-
 interface NewsItemContainerProps {
   image: any,
   title: string,
@@ -58,7 +56,7 @@ const NewsItemContainer = (
               fontFamily:"RalewayRegular"
             }}
         >
-          By {author}
+          From {author}
         </Text>
         <View
           style={styles.footerContainer}
