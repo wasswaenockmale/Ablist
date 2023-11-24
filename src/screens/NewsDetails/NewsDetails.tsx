@@ -6,12 +6,12 @@ import {
   StatusBar,
   Pressable,
   StyleSheet,
+  SafeAreaView,
 } from 'react-native'
 import React from 'react'
 
 import Header from './helperComponents/Header'
 import { COLOR, FONTSIZE } from '../../constants/contants'
-import * as SecureStore from 'expo-secure-store';
 
 import {
   useRoute,
@@ -36,27 +36,16 @@ const NewsDetails = () => {
   const router = useRoute<DetailsScreenProps>();
   const { params } = router;
 
-  const [open, setOpen] = React.useState<boolean>(false);
-  const [showMoreButton, setShowMoreButton] = React.useState<boolean>(false);
+  // const [open, setOpen] = React.useState<boolean>(false);
+  // const [showMoreButton, setShowMoreButton] = React.useState<boolean>(false);
 
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   // share article
   const message = `https://www.techinafrica.com/${params?.title}`;
 
-  // function to bookmark.
-  const bookmark = async () => {
-    const articleArr = await SecureStore.getItemAsync('bookmarks');
-    if (articleArr) {
-      const res = JSON.parse(articleArr);
-      await SecureStore.setItemAsync('bookmarks', JSON.stringify([...res, { ...params }]))
-    } else {
-      await SecureStore.setItemAsync('bookmarks', JSON.stringify([{ ...params }]));
-    }
-  };
-
   return (
-    <Animated.View
+    <SafeAreaView
       style={styles.container}
     >
       <View
@@ -68,9 +57,7 @@ const NewsDetails = () => {
           borderBottomColor: COLOR.B_50
         }}
       >
-        <Header
-          title='Tech News'
-        />
+        <Header/>
         <View
           style={{
             flexDirection: 'row',
@@ -83,12 +70,6 @@ const NewsDetails = () => {
             size={30}
             color={COLOR.GREY_500}
             onPress={() => onShare(message)}
-          />
-          <Ionicons
-            name="bookmark-outline"
-            size={20}
-            color={COLOR.GREY_500}
-            onPress={bookmark}
           />
         </View>
       </View>
@@ -118,7 +99,7 @@ const NewsDetails = () => {
             fontFamily: "RalewayRegular"
           }}
         >
-          {params?.excerpt.split(".").slice(0, 1).join("\n")}
+          { params?.articleContent.match(/[^.!?]+[.!?]+/g)?.slice(0,2).join(" ")}
         </Text>
 
         <Image
@@ -129,6 +110,9 @@ const NewsDetails = () => {
         />
         {/* Author and time  */}
         <View>
+          <Text>Source: {`Tech News Afica.`}</Text>
+          {/* <Text>Source: {`Tech News Afica.`}</Text>
+          <Text>Source: {`Tech News Afica.`}</Text> */}
         </View>
         <Text
           style={{
@@ -137,16 +121,22 @@ const NewsDetails = () => {
             lineHeight: 20,
             letterSpacing: 0.9,
             marginBottom: 10,
-            fontFamily: "RalewayRegular"
+            fontFamily: "RalewayRegular",
           }}
-          numberOfLines={!open ? 15 : undefined}
-          onTextLayout={event => {
-            if (event.nativeEvent.lines.length > 5) {
-              setShowMoreButton(true)
-            }
-          }}
+          // numberOfLines={!open ? 15 : undefined}
+          // onTextLayout={event => {
+          //   if (event.nativeEvent.lines.length > 5) {
+          //     setShowMoreButton(true)
+          //   }
+          // }}
         >
-          {params?.articleContent.replace(params?.excerpt.split(".").slice(0, 1).join("\n"), "")}
+          <Text
+            style={{
+              fontSize: FONTSIZE.HEADING_5,
+              lineHeight: 25,
+            }}
+          >{params?.articleContent.match(/[^.!?]+[.!?]+/g)?.slice(2).join(" ")[1]}</Text>
+          {params?.articleContent.match(/[^.!?]+[.!?]+/g)?.slice(2).join(" ").slice(2,)}
         </Text >
 
         <View
@@ -156,14 +146,15 @@ const NewsDetails = () => {
           }}
         >
           <View />
-          <Pressable
+          {/* <Pressable
             style={{
               flexDirection: 'row',
               alignItems: 'center',
             }}
             onPress={() => {
               setOpen(!open)
-            }}>
+            }}
+          >
             <Text
               style={{
                 color: COLOR.ORANGE_300
@@ -176,16 +167,17 @@ const NewsDetails = () => {
                 <Entypo name="chevron-small-down" size={20} color={COLOR.B_300} /> :
                 <Entypo name="chevron-small-up" size={20} color={COLOR.B_300} />
             }
-          </Pressable>
+          </Pressable> */}
         </View>
 
       </Animated.ScrollView >
       < StatusBar
+        // hidden
         backgroundColor={COLOR.WHITE}
         translucent={false}
         barStyle='dark-content'
       />
-    </Animated.View >
+    </SafeAreaView >
   );
 }
 

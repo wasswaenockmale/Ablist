@@ -8,12 +8,12 @@ interface CategoryItemProps {
   setActive: () => void
 }
 
-const CategoryItem = (
+const CategoryItem: React.FC<CategoryItemProps> = (
   {
     name,
     isActive,
     setActive
-  }: CategoryItemProps
+  }
 ) => {
   return (
     <Pressable

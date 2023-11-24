@@ -1,12 +1,12 @@
 import React from 'react';
-import { useFonts } from 'expo-font';
-import { Entypo } from '@expo/vector-icons';
-import { StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet, View,Text } from 'react-native';
 import { COLOR, FONTSIZE } from '../../constants/contants';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 interface HeaderProps {
-  title: string
-  iconName: any
+  title?: string
+  iconName?: any
 }
 
 
@@ -16,7 +16,17 @@ const Header = (
     iconName,
   }: HeaderProps
 ) => {
+  const navigation = useNavigation();
+  
+  const [bookmarkModalVisible, setBookmarkModalVisible] = React.useState<boolean>(false);
 
+  const toggleModal = () => {
+    setBookmarkModalVisible(!bookmarkModalVisible)
+  }
+  // open drawer 
+  const openDrawer = () => {
+    navigation.dispatch(DrawerActions.openDrawer())
+  }
   return (
     <View
       style={styles.container}
@@ -24,43 +34,20 @@ const Header = (
       <View
         style={{
           flexDirection: 'row',
-          justifyContent: 'space-between'
+          paddingHorizontal: 10,
+          alignItems: 'center',
+          gap:50
         }}
       >
-        <Text
-          style={
-            [
-              styles.text,
-              {
-                fontFamily:"ComfortaaBold"
-              }
-            ]
-          }
-        >
-          {title}
-        </Text>
+        <Ionicons
+          name="menu"
+          size={30}
+          color={COLOR.B_300}
+          onPress={openDrawer}
+        />
+        <Text style={styles.text}>{title}</Text>
+      </View>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 2
-          }}
-        >
-          <Entypo
-            name="dots-three-vertical"
-            size={20}
-            color="black"
-            onPress={() => { }}
-          />
-        </View>
-      </View>
-      <View
-        style={{
-          width: 200
-        }}
-      >
-      </View>
     </View >
   );
 }

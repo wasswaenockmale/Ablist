@@ -5,7 +5,7 @@ import { FONTSIZE } from '../../../constants/contants'
 import { useNavigation } from '@react-navigation/native'
 
 interface HeaderProps {
-  title: string
+  title?: string
 }
 const Header = (
   {

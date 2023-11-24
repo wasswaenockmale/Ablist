@@ -1,58 +1,46 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 
-import { Alert } from 'react-native';
-import * as Updates from 'expo-updates';
 import { NavigationContainer } from '@react-navigation/native';
 
-import Routes from './src/routes/routes';
-import AppContextProvider from './src/helper/context/AppContext';
-import TabBar from './src/routes/TabBar';
+import AppContextProvider, { AppContext } from './src/helper/context/AppContext';
+import AppStack from './src/routes/Drawer/AppStack';
+import { environments } from './src/constants/environments';
+import { useFonts } from 'expo-font';
+
+
+const {
+  APPWRITE_DATABASE_ID,
+  APPWRITE_ARTICLES_COLLECTION_ID,
+  APPWRITE_CODETIPS_COLLECTION_ID,
+} = environments;
 
 export default function App() {
-  // function to listen to updates.
-  const eventListener = (event: Updates.UpdateEvent) => {
-    try {
-      if (event.type === Updates.UpdateEventType.ERROR) {
-        // Error occured.
-      } else if (event.type === Updates.UpdateEventType.NO_UPDATE_AVAILABLE) {
-        // No update available.
-      } else if (event.type === Updates.UpdateEventType.UPDATE_AVAILABLE) {
-        // Since updates are available, notify the user about the updates available
-        Alert.alert(
-          "Update available",
-          "Don't miss out on the latest Ablist features. Tap 'UPDATE' to update your app now.",
-          [
-            {
-              text: "UPDATE",
-              onPress: async () => {
-                // When the user presses 'update'
-                // install updates.
-                await Updates.fetchUpdateAsync();
-                await Updates.reloadAsync();
-              },
-              style: 'cancel'
-            }
-          ],
-          {
-            cancelable: true,
-            onDismiss() { },
-          }
-        )
-      }
-    } catch (error) {
-      console.log("error occured.")
-    }
+  let [fontsLoaded, fontError] = useFonts({
+    "ComfortaaLight": require('./src/assets/fonts/Comfortaa/static/Comfortaa-Light.ttf'),
+    "Comfortaa_Regular": require('./src/assets/fonts/Comfortaa/static/Comfortaa-Regular.ttf'),
+    "ComfortaaMedium": require('./src/assets/fonts/Comfortaa/static/Comfortaa-Medium.ttf'),
+    "ComfortaaSemiBold": require('./src/assets/fonts/Comfortaa/static/Comfortaa-SemiBold.ttf'),
+    "ComfortaaBold": require('./src/assets/fonts/Comfortaa/static/Comfortaa-Bold.ttf'),
+    "RalewayThin": require('./src/assets/fonts/Raleway/static/Raleway-Thin.ttf'),
+    "RalewayExtraLight": require('./src/assets/fonts/Raleway/static/Raleway-ExtraLight.ttf'),
+    "RalewayLight": require('./src/assets/fonts/Raleway/static/Raleway-Light.ttf'),
+    "RalewayRegular": require('./src/assets/fonts/Raleway/static/Raleway-Regular.ttf'),
+    "RalewayMedium": require('./src/assets/fonts/Raleway/static/Raleway-Medium.ttf'),
+    "RalewaySemiBold": require('./src/assets/fonts/Raleway/static/Raleway-SemiBold.ttf'),
+    "RalewayBold": require('./src/assets/fonts/Raleway/static/Raleway-Bold.ttf'),
+    "RalewayExtraBold": require('./src/assets/fonts/Raleway/static/Raleway-ExtraBold.ttf'),
+    "RalewayBlack": require('./src/assets/fonts/Raleway/static/Raleway-Black.ttf')
   }
+  );
 
-  // Listen to the updates available and do the required action.
-  Updates.useUpdateEvents(eventListener);
-  // the return function.
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
   return (
-    // <StackItems />
     <NavigationContainer>
       <AppContextProvider>
-        <Routes />
-        {/* <TabBar /> */}
+        <AppStack />
       </AppContextProvider>
     </NavigationContainer>
   );

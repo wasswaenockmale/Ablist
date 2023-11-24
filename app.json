@@ -2,12 +2,12 @@
   "expo": {
     "name": "Ablist",
     "slug": "Ablist",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/Ablist_splash_screen.png",
+      "image": "./assets/Insightify-splash-preview.png",
       "resizeMode": "contain",
       "backgroundColor": "#F36C32"
     },
@@ -18,17 +18,20 @@
       "supportsTablet": true
     },
     "android": {
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.enock35.Ablist"
+      "package": "com.enock35.Ablist",
+      "permissions": [
+        "INTERNET"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-router"
     ],
     "extra": {
       "router": {

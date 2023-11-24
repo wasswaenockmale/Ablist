@@ -1,42 +1,35 @@
 import {
-  StyleSheet, View,
-  Animated, StatusBar,
+  View,
+  StatusBar,
+  StyleSheet,
 } from 'react-native'
 import React from 'react'
-import { AppContext } from '../../helper/context/AppContext'
 
 // componets 
-import HomeHeading from '../../components/HomeScreenText/HomeHeading'
+import { COLOR } from '../../constants/contants'
 import NewsListContainer from '../../components/News/NewsListContainer/NewsListContainer'
 import LatestNewsContainer from '../../components/News/LatestNews/LatestNewsContainer/LatestNewsContainer'
+import useArticles from '../../helper/hooks/useArticles'
 
 const HomeDisplay = () => {
-
-  const { isLoading } = React.useContext(AppContext);
   return (
     <View
-      style={{
-        width: '100%',
-        flex: 1
-      }}
+      style={styles.container}
     >
-      {!isLoading && <HomeHeading title='Hot News' />}
       {/* container for latest news  */}
       <LatestNewsContainer />
 
-      {!isLoading && <HomeHeading title='Trending News' />}
-      <Animated.ScrollView
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Container for the list of the rest of the news  */}
-        <NewsListContainer />
-
-        <StatusBar />
-      </Animated.ScrollView>
+      <NewsListContainer/>
+      <StatusBar />
     </View>
   )
 }
 
 export default HomeDisplay
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLOR.WHITE
+  }
+})

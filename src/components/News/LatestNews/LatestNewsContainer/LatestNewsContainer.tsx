@@ -1,94 +1,72 @@
-import React from 'react'
+import React, { useContext, useRef } from 'react'
 import {
-  Animated,
-  FlatList,
-  StyleSheet,
   View,
-  ViewToken,
+  StyleSheet,
   useWindowDimensions,
 } from 'react-native';
-
-import { DIMEN } from '../../../../constants/contants';
 
 // hooks 
 import { useNavigation } from '@react-navigation/native';
 
 // components 
-import Paginator from '../../Paginator/Paginator';
-import useArticles from '../../../../helper/hooks/useArticles';
 import NewsItemContainer from '../NewsItemContainer/NewsItemContainer';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { AppContext } from '../../../../helper/context/AppContext';
+import Carousel from 'react-native-snap-carousel';
+import useArticles from '../../../../helper/hooks/useArticles';
 
-const LatestNewsContainer = () => {
+interface LatestNewsContainerProps{
+  topStories?: any
+}
+const LatestNewsContainer: React.FC = () => {
 
+  const { topStories } = useContext(AppContext);
+  // useState
+  const [index, setIndex] = React.useState(0)
   // Navigation hook
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  
-  // state hooks 
-  const [currentIndex, setCurrentIndex] = React.useState<number>(0);
-  
+
   // useWindowDimens()
-  const { width } = useWindowDimensions();
-  
-  // useRef hooks
-  const scrollX = React.useRef(new Animated.Value(1)).current;
-  const slidesRef = React.useRef(null);
-  const viewableItemsChanged = React.useRef(({ viewableItems }: { viewableItems: ViewToken[] }) => {
-    if (viewableItems[0].index !== null) {
-      setCurrentIndex(viewableItems[0].index)
-    }
-  }).current;
+  const { width: windowWidth } = useWindowDimensions();
 
-  const viewConfig = React.useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
+  // useRef hook
+  const isCarouseRed = useRef(null);
 
+  const setCarouselRef = (c: any) => {
+    isCarouseRed.current = c;
+  };
 
-  // custom hook for fetching articles.
-  const { topStories } = useArticles();
 
   const renderLatestStory = ({ item, index }: { item: any, index: number }) => (
-    <View
-      style={{
-        width: width * 0.90,
-        // borderWidth:10
-        marginRight: index === topStories.length - 1 || index === 0 ? 10 : 5,
-        marginLeft: index === 0 ? 5 : 0
+    <NewsItemContainer
+      key={index}
+      image={{ uri: item.featured_image }}
+      title={item.title}
+      author={"Tech News Africa"}
+      publishedAt={item.publishedAt}
+      handleNavigation={() => {
+        navigation.navigate("Details", item);
       }}
-    >
-      <NewsItemContainer
-        key={index}
-        image={{ uri: item.featured_image }}
-        title={item.title}
-        author={"Tech News Africa"}
-        publishedAt={item.publishedAt}
-        handleNavigation={() => {
-          navigation.navigate("Details", item);
-        }}
-      />
-    </View>
+    />
   );
 
   return (
     <View
       style={styles.container}
     >
-      <FlatList
+      <Carousel
+        ref={setCarouselRef}
         data={topStories}
-        style={{ width: '100%', flexWrap: 'wrap' }}
-        numColumns={1}
         renderItem={renderLatestStory}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        bounces={false}
-        keyExtractor={(item) => item?.articleID.toString()}
-        onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], { useNativeDriver: false })}
-        onViewableItemsChanged={viewableItemsChanged}
-        viewabilityConfig={viewConfig}
-        ref={slidesRef}
-      />
-
-      <Paginator
-        data={topStories}
-        scrollX={scrollX}
+        sliderWidth={windowWidth - 10}
+        itemWidth={windowWidth - 40}
+        loop={true}
+        enableSnap={true}
+        autoplay={true}
+        autoplayDelay={1000}
+        autoplayInterval={5000}
+        onSnapToItem={(index) => setIndex(index)}
+        useScrollView={true}
       />
     </View>
   );
@@ -99,6 +77,7 @@ export default LatestNewsContainer;
 const styles = StyleSheet.create({
   container: {
     padding: 5,
+    width: "100%"
   },
   flatListStyle: {
   }

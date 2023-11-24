@@ -7,6 +7,7 @@ import FindTalent from '../screens/FindTalent/FindTalent';
 
 const Tabs = createMaterialTopTabNavigator();
 
+
 const TabBar = () => {
   return (
     <Tabs.Navigator
@@ -14,8 +15,6 @@ const TabBar = () => {
       screenOptions={{
         tabBarGap: 10,
         swipeEnabled: false,
-        tabBarStyle: {
-        }
       }}
     >
       <Tabs.Screen
@@ -23,7 +22,7 @@ const TabBar = () => {
         component={HomeDisplay}
       />
       <Tabs.Screen
-        name='Code Tips'
+        name='Upskill'
         component={CodeTips}
       />
       <Tabs.Screen

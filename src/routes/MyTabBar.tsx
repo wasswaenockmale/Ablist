@@ -1,9 +1,14 @@
-import { Animated, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 import { COLOR, FONTSIZE } from '../constants/contants';
+import {
+  MaterialTopTabNavigationProp,
+} from '@react-navigation/material-top-tabs';
+
+
 
 function MyTabBar({ state, descriptors, navigation }) {
   return (
-    <View style={{ flexDirection: 'row' }}>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label =
@@ -50,20 +55,25 @@ function MyTabBar({ state, descriptors, navigation }) {
               paddingVertical: 10,
               paddingHorizontal: 10,
               marginBottom: 2,
-              borderBottomWidth: isFocused ? 1 : 0,
-              borderBottomColor: COLOR.ORANGE_300
             }}
           >
-            <Animated.Text
+            <View
               style={{
-                // textAlign: 'center',
-                fontSize: FONTSIZE.TITLE_1,
-                color: isFocused ? COLOR.ORANGE_300 : COLOR.B_500,
-                fontFamily:"ComfortaaBold"
+                alignSelf: 'flex-start',
+                borderBottomWidth: isFocused ? 3 : 0,
+                borderBottomColor: COLOR.ORANGE_300,
               }}
             >
-              {label}
-            </Animated.Text>
+              <Text
+                style={{
+                  fontSize: FONTSIZE.TITLE_1,
+                  color: isFocused ? COLOR.ORANGE_300 : COLOR.B_500,
+                  fontFamily: "ComfortaaBold",
+                }}
+              >
+                {label}
+              </Text>
+            </View>
           </TouchableOpacity>
         );
       })}

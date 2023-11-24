@@ -37,10 +37,45 @@ type TalentSubmissionForm = {
   lookingFor: string
   message: string
 }
+interface ExpandableListItemProps {
+  title: string,
+  content: string,
+  snippet?: any,
+  sourceName?: string,
+  sourceLink?: string
+  expandedIndex?: number | null
+  index: number
+  onToggleExpand?: (index: number) => void
+}
+
+interface HomeDisplayProps{
+  topStories: any[]
+  articles: any[]
+}
+
+interface Author {
+  name: string,
+  imageUrl: string,
+  ID: string
+}
+
+type ArticleType = {
+  title: string
+  featured_image: string
+  excerpt: string
+  articleContent: string
+  publishedAt:string
+  articleID: number
+  author: Author
+}
+
 export {
   NewsRouteParams,
   RootStackParamList,
   DetailsScreenProps,
   TalentSubmissionForm,
-  userModal
+  userModal,
+  ExpandableListItemProps,
+  HomeDisplayProps,
+  ArticleType
 }

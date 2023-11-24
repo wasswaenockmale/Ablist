@@ -8,6 +8,7 @@ import { COLOR, FONTSIZE } from '../../constants/contants'
 import { View, Text, Image, StyleSheet } from 'react-native'
 
 const CustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
+  
   return (
     <DrawerContentScrollView {...props}>
       <View
@@ -17,7 +18,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
           style={styles.headerImage}
           source={require('../../../assets/adaptive-icon.png')}
         />
-        <Text style={styles.headerText}>Ablist</Text>
+        <Text style={styles.headerText}>Insightify</Text>
       </View>
       <DrawerItemList {...props} />
     </DrawerContentScrollView>

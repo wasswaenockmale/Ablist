@@ -19,7 +19,11 @@ async function storeToLocalStorage(key:string, value: any) {
 
 async function retrieveLocalData(key:string) {
   try {
-    return await AsyncStorage.getItem(`${key}`);
+    const res = await AsyncStorage.getItem(`${key}`);
+    if (res) {
+      return JSON.parse(res)
+    }
+    return
   } catch (error) {
     
   }
@@ -31,4 +35,10 @@ async function clearLocalData(key:string) {
   } catch (error) {
     
   }
+}
+
+export {
+  clearLocalData,
+  retrieveLocalData,
+  storeToLocalStorage,
 }

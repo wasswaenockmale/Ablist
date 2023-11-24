@@ -20,6 +20,8 @@
     "@react-navigation/native-stack": "^6.9.16",
     "@types/react": "~18.0.27",
     "appwrite": "^13.0.0",
+    "axios": "^1.6.2",
+    "cheerio": "^1.0.0-rc.12",
     "expo": "~49.0.15",
     "expo-font": "~11.4.0",
     "expo-updates": "~0.18.17",
@@ -43,7 +45,7 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/react": "~18.2.14",
-    "@types/react-native-dotenv": "^0.2.1",
+    "@types/react-native-dotenv": "^0.2.2",
     "@types/react-native-snap-carousel": "^3.8.9",
     "@types/react-syntax-highlighter": "^15.5.9",
     "typescript": "^5.1.3"

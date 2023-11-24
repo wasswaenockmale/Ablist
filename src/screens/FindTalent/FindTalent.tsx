@@ -5,14 +5,16 @@ import {
   TextInput,
   ToastAndroid,
   ActivityIndicator,
-} from 'react-native'
-import React from 'react'
-import { Picker } from "@react-native-picker/picker";
+  KeyboardAvoidingView
+} from 'react-native';
+import React from 'react';
 import { Formik } from 'formik';
+import { Picker } from "@react-native-picker/picker";
 import DatabaseService from '../../appwrite/appwrite';
-import { COLOR, FONTSIZE } from '../../constants/contants'
-import { environments } from '../../constants/environments';
 import { TalentSubmissionForm } from '../../utils/types';
+import { ScrollView } from 'react-native-gesture-handler';
+import { COLOR, FONTSIZE } from '../../constants/contants';
+import { environments } from '../../constants/environments';
 import { TalentFormValidationSchema } from '../../utils/validations';
 
 // Access the environmental variables needed in this file.
@@ -39,7 +41,7 @@ const submitTalentRequestForm = async (values: TalentSubmissionForm) => {
 const FindTalent = () => {
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container}>
       <View
         style={{
           paddingHorizontal: 20,
@@ -68,15 +70,15 @@ const FindTalent = () => {
             values,
             errors,
             touched,
-            isValid,
             isSubmitting,
             handleBlur,
             handleSubmit,
             handleChange,
           }
         ) => (
-          <View
+          <ScrollView
             style={styles.formContainer}
+            showsVerticalScrollIndicator={false}
           >
             <TextInput
               onChangeText={handleChange('name')}
@@ -126,7 +128,7 @@ const FindTalent = () => {
                 onValueChange={handleChange('lookingFor')}
               >
                 <Picker.Item
-                  label="Select a Role"
+                  label="I'm looking for"
                   value=""
                 />
                 <Picker.Item
@@ -162,33 +164,40 @@ const FindTalent = () => {
               onPress={() => handleSubmit()}
               style={{
                 ...styles.button,
-                padding: isSubmitting ? 10 : 5,
-                opacity: isValid ? 0.7 : 1
+                flexDirection: "row",
+                alignContent: "center",
+                justifyContent: "center",
+                gap: 5,
+                opacity: isSubmitting ? 0.5 : 1
+
               }}
-              disabled={isSubmitting || isValid}
+              disabled={isSubmitting}
             >
+
+              {/* {!isSubmitting && */}
+              {/* <View> */}
               {isSubmitting &&
                 <ActivityIndicator
-                size='small'
-                color={COLOR.WHITE}
+                  size='small'
+                  color={COLOR.WHITE}
                 />
               }
-              {!isSubmitting &&
-                <Text
-                  style={{
-                    color: COLOR.WHITE,
-                    textAlign: 'center',
-                    fontFamily: "ComfortaaBold"
-                  }}
-                >
-                  SEND
-                </Text>
-              }
+              <Text
+                style={{
+                  color: COLOR.WHITE,
+                  textAlign: 'center',
+                  fontFamily: "ComfortaaBold"
+                }}
+              >
+                SEND
+              </Text>
+              {/* </View> */}
+              {/* } */}
             </Pressable>
-          </View>
+          </ScrollView>
         )}
       </Formik>
-    </View>
+    </KeyboardAvoidingView>
   )
 }
 
@@ -196,9 +205,9 @@ export default FindTalent
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    // padding: 10,
     backgroundColor: COLOR.WHITE,
-    flex: 1
+    flex: 1,
   },
   text: {
     fontFamily: 'RalewayRegular'
@@ -230,6 +239,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: COLOR.DANGER,
-    paddingHorizontal:10
+    paddingHorizontal: 10
   }
 })

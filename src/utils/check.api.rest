@@ -1,0 +1,7 @@
+### Request 1
+GET https://bing-news-search1.p.rapidapi.com/news
+?textFormat=Raw
+&safeSearch=Off
+X-BingApis-SDK: true,
+X-RapidAPI-Key: b8cebdec1dmshd27b93489965724p1bb42ejsn6b62dd2837b5,
+X-RapidAPI-Host: bing-news-search1.p.rapidapi.com

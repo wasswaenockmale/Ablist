@@ -1,58 +1,48 @@
-import React from 'react';
 import {
   Linking,
   Pressable,
   StyleSheet,
   Text, View
 } from 'react-native';
-
-import { Feather, FontAwesome } from '@expo/vector-icons';
-import { COLOR, FONTSIZE } from '../../../constants/contants';
-import { atomOneDarkReasonable } from "react-syntax-highlighter/dist/esm/styles/hljs";
-import CodeHighlighter from "react-native-code-highlighter";
+import React from 'react';
 import onShare from '../../../utils/onShare';
+import { Feather, FontAwesome } from '@expo/vector-icons';
+import CodeHighlighter from "react-native-code-highlighter";
+import { COLOR, FONTSIZE } from '../../../constants/contants';
+import { ExpandableListItemProps } from '../../../utils/types';
+import { atomOneDarkReasonable } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
-interface ExpandableListItemProps {
-  title: string,
-  content: string,
-  snippet: any,
-  sourceName: string,
-  sourceLink: string
-  expandedIndex: number | null
-  index: number
-  onToggleExpand: (index: number) => void
-}
-
-const ExpandableListItem = (
+const ExpandableListItem:React.FC<ExpandableListItemProps> = (
   {
     title,
     index,
     content,
-    snippet = "",
     sourceName,
     sourceLink,
+    snippet = "",
     expandedIndex,
     onToggleExpand
-  }: ExpandableListItemProps
-) => {
+  }) => {
   const [expand, setExpand] = React.useState<boolean>(true);
 
   const tipSource = sourceLink ?? `https://bootcamp.berkeley.edu/blog/use-these-7-tips-to-help-you-learn-computer-programming-faster/`
   const toggleExpand = () => {
     setExpand(!expand);
-    onToggleExpand(index);
+    if (onToggleExpand) {
+      onToggleExpand(index);
+    }
   }
 
   const handleLinkPress = async () => {
     try {
-      const canOpen = await Linking.canOpenURL(sourceLink)
+      const canOpen = await Linking.canOpenURL(sourceLink ?? "")
         .then(response => response)
         .catch((error: any) => {
           console.log("Link error", error.message);
         });
       if (canOpen) {
         console.log("The link should open");
-        await Linking.openURL(sourceLink)
+        await Linking.openURL(sourceLink ?? "")
           .then(response => {
             console.log("Opened the link", response);
           })
@@ -204,6 +194,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR.GREY_50,
     elevation: 1,
     borderColor: COLOR.GREY_75,
+    borderWidth: 0.2,
+    flex:1
   },
   itemPressable: {
     height: 100,

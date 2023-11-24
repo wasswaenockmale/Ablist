@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Image, View, Text, Pressable } from 'react-native'
-import { COLOR, DIMEN, FONTSIZE } from '../../../../constants/contants';
+import { COLOR, FONTSIZE } from '../../../../constants/contants';
 import { ArticleLifeSpan } from '../../../../helper/functions/functions';
 
 interface NewsItemContainerProps {
@@ -83,11 +83,11 @@ export default NewsItemContainer
 
 const styles = StyleSheet.create({
   container: {
-
   },
 
   imageView: {
     borderRadius: 10,
+    width:'100%'
   },
 
   imageStyle: {
@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
 
   headingContainer: {
     width: '100%',
+    flex:1,
     position: 'absolute',
     bottom: 0,
     backgroundColor: COLOR.NEUTRAL_2,

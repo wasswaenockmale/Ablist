@@ -1,19 +1,21 @@
 import Routes from "../routes";
+import { COLOR } from "../../constants/contants";
 import CustomDrawerContent from "./CustomDrawerContent";
-import { createDrawerNavigator } from "@react-navigation/drawer";
 import Contact from "../../screens/Drawer/Contact/Contact";
 import Privacy from "../../screens/Drawer/Privacy/Privacy";
-import { COLOR } from "../../constants/contants";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 
 const Drawer = createDrawerNavigator();
 
+
 const AppStack = () => {
+
   return (
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawerContent {...props} />}
       screenOptions={{
         headerShown: false,
-        drawerActiveTintColor:COLOR.ORANGE_300
+        drawerActiveTintColor: COLOR.ORANGE_300
       }}
     >
       <Drawer.Screen
@@ -34,7 +36,7 @@ const AppStack = () => {
         name='Privacy'
         component={Privacy}
         options={{
-          title:'Privacy Policy'
+          title: 'Privacy Policy'
         }}
       />
     </Drawer.Navigator>
